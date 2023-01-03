@@ -1,0 +1,11 @@
+{
+  "aid": 227,
+  "version": "1.0.1",
+  "components": [],
+  "static": [
+    "../../static/login-bg.png",
+    "../../static/phone.png",
+    "../../static/yzm.png",
+    "../../static/login-quick-001.png"
+  ]
+}

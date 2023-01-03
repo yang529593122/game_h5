@@ -1,0 +1,8 @@
+{
+  "aid": 458,
+  "version": "1.0.1",
+  "components": [
+    "../../components/fu-filter-dropdown/fu-filter-dropdown.vue"
+  ],
+  "static": []
+}

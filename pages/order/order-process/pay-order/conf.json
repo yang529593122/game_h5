@@ -1,0 +1,13 @@
+{
+  "aid": 177,
+  "version": "1.0.1",
+  "components": [
+    "../../components/fu-pay-keyboard/fu-pay-keyboard.vue",
+    "../../components/fu-pay-fingerprint/fu-pay-fingerprint.vue"
+  ],
+  "static": [
+    "../../static/ye.png",
+    "../../static/wx.png",
+    "../../static/zfb.png"
+  ]
+}

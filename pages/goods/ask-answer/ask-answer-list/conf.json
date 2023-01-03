@@ -1,0 +1,10 @@
+{
+  "aid": 201,
+  "version": "1.0.1",
+  "components": [],
+  "static": [
+    "../../static/questions.png",
+    "../../static/answer.png",
+    "../../static/help.png"
+  ]
+}

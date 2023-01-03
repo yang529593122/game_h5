@@ -1,0 +1,10 @@
+{
+  "aid": 258,
+  "version": "1.0.1",
+  "components": [
+    "../../components/fu-share-invite/fu-share-invite.vue"
+  ],
+  "static": [
+    "../../static/new-bg.jpg"
+  ]
+}

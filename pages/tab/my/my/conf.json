@@ -1,0 +1,21 @@
+{
+  "aid": 23,
+  "version": "1.0.1",
+  "components": [],
+  "static": [
+    "../../../../static/my/my-background.png",
+    "../../../../static/my/top-1.png",
+    "../../../../static/my/top-2.png",
+    "../../../../static/logo.png",
+    "../../../../static/my/order-pic-1.png",
+    "../../../../static/my/order-pic-2.png",
+    "../../../../static/my/order-pic-3.png",
+    "../../../../static/my/order-pic-4.png",
+    "../../../../static/my/order-pic-5.png",
+    "../../../../static/my/right-arrow.png",
+    "../../../../static/my/001.png",
+    "../../../../static/my/002.png",
+    "../../../../static/my/003.png",
+    "../../../../static/my/004.png"
+  ]
+}

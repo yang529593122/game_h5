@@ -1,0 +1,13 @@
+{
+  "aid": 347,
+  "version": "1.0.1",
+  "components": [],
+  "static": [
+    "../../static/stard2.png",
+    "../../static/star2.png",
+    "../../static/fabulous-fail.png",
+    "../../static/fabulous-succ.png",
+    "../../static/message2.png",
+    "../../static/edit.png"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "aid": "478",
+  "version": "1.0.0",
+  "components": [
+    "../../components/fu-grid3/fu-grid.vue",
+    "../../components/fu-swiper3/fu-swiper.vue",
+    "../../components/fu-advert3/fu-advert.vue",
+    "../../components/fu-nologin/fu-nologin.vue",
+    "../../components/ben-coupon/ben-coupon.vue",
+    "../../components/ben-seckill3/ben-seckill.vue",
+    "../../components/fu-waterflow3/fu-waterflow.vue",
+    "../../components/ben-count-down3/ben-count-down.vue",
+    "../../components/fu-goods-block3/fu-goods-block.vue",
+    "../../components/fu-waterfall3/fu-waterfall.vue"
+  ],
+  "static": [
+    "../../../../static/home/bg.png",
+    "../../../../static/home/bg-h.png",
+    "/static/home/signin.png",
+    "/static/home/appshare.png"
+  ]
+}

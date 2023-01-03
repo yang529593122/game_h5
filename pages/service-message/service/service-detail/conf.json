@@ -1,0 +1,14 @@
+{
+  "aid": 103,
+  "version": "1.0.0",
+  "components": [],
+  "static": [
+    "../../static/call.png",
+    "../../static/005.png",
+    "../../static/emoji.png",
+    "../../static/add.png",
+    "../../static/backspace-solid.png",
+    "../../static/img.png",
+    "../../static/camera-1.png"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "aid": 219,
+  "version": "1.0.1",
+  "components": [
+    "../../components/fu-scroll/fu-scroll.vue"
+  ],
+  "static": []
+}

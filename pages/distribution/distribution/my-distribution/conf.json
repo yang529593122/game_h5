@@ -1,0 +1,11 @@
+{
+  "aid": 218,
+  "version": "1.0.1",
+  "components": [],
+  "static": [
+    "../../static/card.png",
+    "../../static/money.png",
+    "../../static/order.png",
+    "../../static/v.png"
+  ]
+}

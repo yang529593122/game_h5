@@ -1,0 +1,8 @@
+{
+  "aid": 24,
+  "version": "1.0.1",
+  "components": [
+    "../../components/w-picker/w-picker.vue"
+  ],
+  "static": []
+}

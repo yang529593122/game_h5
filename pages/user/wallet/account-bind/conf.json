@@ -1,0 +1,10 @@
+{
+  "aid": 239,
+  "version": "1.0.1",
+  "components": [],
+  "static": [
+    "../../static/zfb.png",
+    "../../static/wx.png",
+    "../../static/ye.png"
+  ]
+}

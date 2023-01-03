@@ -1,0 +1,14 @@
+{
+  "aid": 243,
+  "version": "1.0.1",
+  "components": [
+    "../../components/keyboard/keyboard.vue"
+  ],
+  "static": [
+    "../../static/wechatpay.png",
+    "../../static/checked.png",
+    "../../static/unchecked.png",
+    "../../static/alipay.png",
+    "../../static/card.png"
+  ]
+}
