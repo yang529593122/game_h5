@@ -116,7 +116,7 @@ export default {
       })
       col1Index = value ? (col1Index != -1 ? col1Index : 0) : 0
       col1 = arr1[col1Index]
-
+			console.log(col1Index,this.nodeChild,arr1)
       /*第2列*/
       arr2 = arr1[col1Index][this.nodeChild]
       col2Index = arr2.findIndex((v) => {
@@ -199,6 +199,7 @@ export default {
           value = [col1[this.nodeVal], col2[this.nodeVal]]
           result = `${col1[this.nodeKey] + col2[this.nodeKey]}`
           range = [arr1, arr2]
+					console.log(range)
           break
         case 3:
           value = [col1[this.nodeVal], col2[this.nodeVal], col3[this.nodeVal]]

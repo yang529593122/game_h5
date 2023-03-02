@@ -46,6 +46,24 @@
         </view>
       </view>
       <!-- 输入密码 end -->
+
+      <!-- 再次输入密码 start -->
+      <view class="input-wapper solid-bottom">
+        <view class="title">
+          <image class="image" src="../../static/pwd.png" mode="widthFix"></image>
+        </view>
+        <view class="pwd">
+          <input placeholder-class="placeholderClass" v-if="newtype == 'password'" type="password" v-model="newpassword"
+            :placeholder="i18n['再次输入密码']" minlength="6" maxlength="12" />
+          <input placeholder-class="placeholderClass" v-if="newtype == 'text'" type="text" v-model="newpassword" :placeholder="i18n['再次输入密码']"
+            minlength="6" maxlength="12" />
+          <view class="pwd-right">
+            <image src="../../static/open.png" :data-type="newtype" @click.stop="is_kejian_new" v-if="newtype == 'text'" mode="widthFix"></image>
+            <image src="../../static/close.png" :data-type="newtype" @click.stop="is_kejian_new" v-if="newtype == 'password'" mode="widthFix"></image>
+          </view>
+        </view>
+      </view>
+      <!-- 再次输入密码 end -->
     </view>
     <!-- 表单信息 end -->
     <!-- 提交按钮 start -->
@@ -67,11 +85,13 @@
         phone: '', //手机号
         vercode: '', //验证码
         password: '', //密码
+        newpassword:'', // 二次密码
         verCodeBtnLoading: false,
         time: 60, //倒计时60S
         beginning: false, //显示倒计时
         is_click: false,
         type: 'password', //密码类型
+        newtype:'password',
       };
     },
     onLoad() {
@@ -91,6 +111,14 @@
           this.type = 'text';
         } else {
           this.type = 'password';
+        }
+      },
+      is_kejian_new(e){
+        let type = e.currentTarget.dataset.type;
+        if (type == 'password') {
+          this.newtype = 'text';
+        } else {
+          this.newtype = 'password';
         }
       },
       /**
@@ -113,7 +141,7 @@
         }
         if (this.beginning) return false;
         this.verCodeBtnLoading = true;
-        
+
         this.$api
           .post(global.apiUrls.GetVerifyCode, {
            is_test: global.IS_DEV,
@@ -154,7 +182,7 @@
           return;
         }
         // 从data取值 phone手机号 vercode验证码 password密码
-        let { phone, vercode, password } = this;
+        let { phone, vercode, password, newpassword} = this;
         // 手机号不存在
         if (!phone) {
           this.$message.info(this.i18n['请输入手机号']);
@@ -173,6 +201,14 @@
         // 验证码错误
         if (!validate(password, 'password')) {
           this.$message.info(this.i18n['请输入字母加数字6-12位密码']);
+          return false;
+        }
+        if (!validate(newpassword, 'password')) {
+          this.$message.info(this.i18n['再次输入密码']);
+          return false;
+        }
+        if(newpassword!==password){
+          this.$message.info(this.i18n['两次密码不一致']);
           return false;
         }
         // 加载动画完成

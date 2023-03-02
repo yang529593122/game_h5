@@ -232,7 +232,18 @@
             "base" : "/h5/"
         },
         "devServer" : {
-            "https" : false
+            "https" : false,
+            "disableHostCheck":true,
+            "proxy": {
+            		"/api": {
+            			"target": "https://zhiyuanhuyu.niurenjianzhan.com/api/",
+            			"changeOrigin": true,
+            			"secure": false,
+            			"pathRewrite": {
+            				"^/api": ""
+            			}
+            		}
+            	}
         },
         "optimization" : {
             "treeShaking" : {

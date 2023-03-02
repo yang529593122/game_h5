@@ -19,9 +19,12 @@
 							<view class="flex justify-between align-center">
 								<view style="color: #36373D;line-height: 40rpx;max-height: 80rpx;width: 330rpx;"
 									class="text-cut text-df text-weight-500">{{item.game_name}}</view>
+                <view style="color: #B7BAC2;" v-if="item.status === 2" class="text-df">草稿</view>
+                <block v-else>
+                  <view style="color: #B7BAC2;" v-if="item.evaluate_status === 0" class="text-df">评估中</view>
+                  <view style="color: #659BC7;" v-else class="text-df">已评估</view>
+                </block>
 
-								<view style="color: #B7BAC2;" v-if="item.evaluate_status === 0" class="text-df">评估中</view>
-								<view style="color: #659BC7;" v-else class="text-df">已评估</view>
 							</view>
 							<view class="text-sm text-bold" style="color: #F55B29;margin-top: 19rpx;">¥{{item.price}}</view>
 							<view class="text-sm text-cut" style="margin-top: 10rpx;color: #868686;width: 430rpx;">

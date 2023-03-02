@@ -181,14 +181,14 @@
 				</view>
 			</view> -->
 		</view>
-
+<!-- 
 		<view
 			style="color: #333;padding: 32rpx;"
 			@click="gotoKefushangpin"
 		>温馨提示:如遇支付失败请及时
 			<text style="color: #4177DD;">联系客服</text>
 			手动支付,以免超时扣款或被他人抢购。
-		</view>
+		</view> -->
 
 		<!-- 支付按钮 -->
 		<button

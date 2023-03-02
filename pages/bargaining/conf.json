@@ -1,0 +1,23 @@
+{
+  "aid": 389,
+  "version": "1.0.6",
+  "components": [
+    "../../components/fu-specs-popup/index.vue",
+    "../../components/fu-coupon/index.vue",
+    "../../components/fu-explain/index.vue",
+    "../../components/fu-goods-address/index.vue",
+    "../../components/fu-evaluate/fu-evaluate.vue",
+    "../../components/jd-coupon/jd-coupon.vue"
+  ],
+  "static": [
+    "../../static/detail_share.png",
+    "../../static/video-bg.png",
+    "../../static/collect-2.png",
+    "../../static/collect-1.png",
+    "../../static/address-copn.png",
+    "../../static/questions.png",
+    "../../static/007.png",
+    "../../static/008.png",
+    "../../static/detail_coupon_bg.png"
+  ]
+}

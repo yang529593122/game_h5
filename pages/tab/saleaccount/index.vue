@@ -4,9 +4,9 @@
 			<view class="cuIcon-search"></view>
 			<input class="saleaccountPageInputIn" disabled="true" placeholder="搜索游戏名称／商品编号" placeholder-style="font-size: 28rpx;font-weight: 500;color: #868686;"/>
 		</view>
-		
+
 		<view class="MoreGram">
-			<fu-tab :tabs="MoreListGame" :current="current" node-key="id" current-key="id" @change="changeTab"></fu-tab>
+			<fu-tab :tabs="BUY_NAV_DATAS" :current="current" node-key="id" current-key="id" @change="changeTab"></fu-tab>
 		</view>
 		<fu-loading v-if="isShowloading"></fu-loading>
 		<block v-else>
@@ -24,7 +24,12 @@
 				</view>
 				<view class="rightAllselect">
 					<view style="width: 36rpx;" class="text-center" v-for="(item,index) in allGameList" :key="index" @click="selectCeItem(item,index)">
-						<block v-if="item.list.length">{{index}}</block>
+						<block v-if="item.list.length">
+                <block v-if='index ===HOT_GAME '>
+                  {{ HOT_GAME_TEXT }}
+                </block>
+                <block v-else>{{ index }}</block>
+            </block>
 					</view>
 				</view>
 			</block>
@@ -33,19 +38,14 @@
 </template>
 
 <script>
+  import { HOT_GAME,BUY_NAV_DATAS,HOT_GAME_TEXT } from "../../../common/constStatic.js"
+
 	export default {
 		data() {
 			return {
-				MoreListGame:[{
-						  name:'全部',
-						  id:0
-				},{
-						 name:'端游',
-						 id:1,
-				},{
-						 name:'手游' ,
-						 id:2
-				}],
+        HOT_GAME,  // 热门标识
+				BUY_NAV_DATAS, // 导航
+        HOT_GAME_TEXT,
 				current:0,
 				allGameList:[],
 				isShowloading:false,
@@ -54,12 +54,12 @@
 			}
 		},
 		onLoad() {
-			this.gamegamelistmobile(true);	
+			this.gamegamelistmobile(true);
 		},
 		onShow() {
 		},
 		methods: {
-			
+
 			gamegamelistmobile(status) {
 				if(status) {
 					this.isShowloading = true;
@@ -73,19 +73,13 @@
 						let allGameListLenght = 0;
 						if(res.data.data) {
 							for(let i in res.data.data) {
-								console.log(i);
-								console.log(res.data.data[i].list)
 								if(res.data.data[i].list.length) {
-									// res.data.data[i].list.forEach(k => {
-									// 	allGameListLenght++;
-									// })
 									allGameListLenght+=res.data.data[i].list.length;
 									continue;
 								}
-								
+
 							}
 							this.allGameListLenght = allGameListLenght;
-							// console.log(this.allGameListLenght + '33322222222222')
 						} else {
 							this.allGameListLenght = 0
 						}
@@ -100,14 +94,11 @@
 				this.current = e.index;
 				this.gamegamelistmobile(true);
 			},
-			
 			navToSearch() {
 			  this.$urouter.navigateTo(
 			    "/pages/index/search/search/index"
 			  );
 			},
-			
-			// /pages/index/search/search-list/index?keyWords=youxi
 			gotoDetail(it) {
 				this.$urouter.navigateTo('/pages/index/search/search-list/index?gameId=' + it.game_id);
 			},
@@ -133,7 +124,7 @@
 </script>
 
 <style lang="scss" scoped>
-	
+
 	.saleaccountPageInput {
 		width: 702rpx;
 		height: 64rpx;
@@ -143,7 +134,7 @@
 		display: flex;
 		padding: 0 20rpx;
 		align-items: center;
-		
+
 		.saleaccountPageInputIn {
 			height: 64rpx;
 			line-height: 64rpx;
@@ -151,16 +142,16 @@
 			margin-left: 15rpx;
 		}
 	}
-	
+
 	.saleaccountPage {
 		min-height:100vh;
 		background:#FFF;
 	}
-	
+
 	.MoreGram {
 		height: 100rpx;
 	}
-	
+
 	.rightAllselect {
 		position: fixed;
 		bottom: 212rpx;
@@ -172,13 +163,13 @@
 		font-size: 20rpx;
 		border-radius: 12rpx 0px 0px 14rpx;
 	}
-	
+
 	.allGramYouxiList {
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
 		padding: 40rpx 28rpx;
-		
+
 		.allGramYouxiItem {
 			display: flex;
 			flex-direction: column;
@@ -187,12 +178,12 @@
 			width: 160rpx;
 			margin-right: 19rpx;
 			margin-bottom: 40rpx;
-			
+
 			.allGramYouxiItemImg {
 				width: 128rpx;
 				height: 128rpx;
 			}
-			
+
 			.allGramYouxiItemText {
 				width: 128rpx;
 				white-space: nowrap;
@@ -202,7 +193,7 @@
 				margin-top: 16rpx;
 			}
 		}
-		
+
 		.allGramYouxiItem:nth-child(4n) {
 			margin-right: 0!important;
 		}

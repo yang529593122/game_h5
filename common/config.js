@@ -8,7 +8,7 @@ export const WEBSOCKET = 'wss://zbphp.zhongbenzx.com/socket/';
 // https://www.qingshanyouxi.com
 // https://game.qingshanyouxi.com
 export const CUSTOMER53URL = 'https://tb.53kf.com/code/client/af43490008ab02e87b677b9c4d34744a0/1'; // 53快服链接
-export const IS_DEV = 0;                              // 0:生产环境 1:开发环境 2:mock环境
+export const IS_DEV = 1;                              // 0:生产环境 1:开发环境 2:mock环境
 export const PAGE_SIZE = 15;                          // 分页配置 每页条数
 export const API_VERSION = 'v1';//APP接口版本号 正常是V1 使用天添客m加企业ID
 

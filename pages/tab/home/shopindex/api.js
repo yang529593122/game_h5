@@ -7,8 +7,11 @@ export default {
   postGetConfig: '/v1/5f802beb5cb06',	//获取系统配置
   aboutUs:'/v1/60e561cd51d26',//版本信息
   // postSearchScanCode: '/v1/5fcf15cb26163',//扫一扫二维码
-  
+
  gamegameindex: '/v1/62afc2ad251ad',//首页轮播图
  gamenearlydepreciategamelist : '/v1/62b2e1d4912ad',//最近ji降价游戏列表
  gamenearlydepreciatelist : '/v1/62afc68cb3ef8',//最近降价商品列表
+ recentTransactionList:'/v1/62afca441227e', // 近期成交列表
+ latestShelvesNav:'/v1/62afcb645f25e'  ,// 最新上架 导航
+ latestShelvesData:'/v1/game/game_goods_list' // 最新上架 列表  // 62afde001f337
 }

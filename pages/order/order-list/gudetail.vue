@@ -12,26 +12,36 @@
 		<fu-loading v-if="isShowLoading"></fu-loading>
 		<block v-else>
 			<!-- 状态 -->
-			
-			
-			<!-- 评估中 -->
-			<view class="statusacross" style="background: #F4F5F6;" v-if="evaluate_status === 0">
+
+			<view class="statusacross" style="background: #F4F5F6;" v-if="status === 2">
 				<view class="statusacrossImg">
 					<image src="../static/2.png"></image>
 				</view>
-				<view class="statusacrossStatus" style="color: #B7BAC2;">评估中</view>
+				<view class="statusacrossStatus" style="color: #B7BAC2;">草稿</view>
 				<!-- <view class="statusacrossRelative">请等待客服联系您</view> -->
 			</view>
-			
-			<!-- 已评估-->
-			<view class="statusacross" style="background: #E4ECF5;" v-else>
-				<view class="statusacrossImg">
-					<image src="../static/xz.png"></image>
-				</view>
-				<view class="statusacrossStatus" style="color: #659BC7;">已评估</view>
-				<!-- <view class="statusacrossRelative" style="color: #E8625B;">您的账号不不存在，请重新修改</view> -->
-			</view>
-			
+      <block v-else>
+        <!-- 评估中 -->
+
+        <view class="statusacross" style="background: #F4F5F6;" v-if="evaluate_status === 0">
+        	<view class="statusacrossImg">
+        		<image src="../static/2.png"></image>
+        	</view>
+        	<view class="statusacrossStatus" style="color: #B7BAC2;">评估中</view>
+        	<!-- <view class="statusacrossRelative">请等待客服联系您</view> -->
+        </view>
+
+        <!-- 已评估-->
+        <view class="statusacross" style="background: #E4ECF5;" v-else>
+        	<view class="statusacrossImg">
+        		<image src="../static/xz.png"></image>
+        	</view>
+        	<view class="statusacrossStatus" style="color: #659BC7;">已评估</view>
+        	<!-- <view class="statusacrossRelative" style="color: #E8625B;">您的账号不不存在，请重新修改</view> -->
+        </view>
+      </block>
+
+
 			<!-- 游戏 -->
 			<!-- <view class="myStatusDetailPageGoods">
 				<view class="myStatusDetailPageGoodsImg">
@@ -42,7 +52,7 @@
 					<view class="text-cut myStatusDetailPageGoodsRightBottom">怀旧一区 / 半城烟沙 </view>
 				</view>
 			</view> -->
-			
+
 			<!-- 账号信息 -->
 			<!-- 已经评估 start -->
 			<view style="" v-if="evaluate_status === 1">
@@ -53,7 +63,7 @@
 					</view>
 					<view style="margin-top: 11rpx;color: #868686;" class="text-sm">账号评估价格</view>
 				</view>
-				
+
 				<view class="bg-white" style="border-radius: 8rpx;padding: 0 24rpx;width: 702rpx;margin-left: 24rpx;">
 					<view style="color: #36373D;padding: 24rpx 0 24rpx;" class="text-df text-weight-500">账号评估反馈</view>
 					<view style="height: 1px;width: 100%;background: #DDDDDD;"></view>
@@ -64,7 +74,7 @@
 				</view>
 			</view>
 			<!-- 已经评估 end -->
-			
+
 			<view class="bg-white" style="width: 702rpx;padding: 24rpx 24rpx;margin-top: 24rpx;margin-left: 24rpx;">
 				<view style="color: #36373D;padding: 0 0 24rpx;" class="text-df text-weight-500">账号信息</view>
 				<view style="height: 1px;width: 100%;background: #DDDDDD;"></view>
@@ -121,7 +131,7 @@
 			</view>
 		</block>
 		<!--  -->
-		
+
 		<!-- <view class="onlinePayBottomBtn">我要挂号</view> -->
 		<button type="default" class="onlinePayBottomBtn" v-if="evaluate_status === 1" :loading="loading" @click="myGua">我要挂号</button>
 	</view>
@@ -143,7 +153,8 @@
 				qqNum:'',//qq号码
 				wechat:'',//微信号码
 				evaluate_price:'',
-				evaluate_info:''
+				evaluate_info:'',
+        status:'',
 			}
 		},
 		onLoad(options) {
@@ -171,6 +182,7 @@
 						this.mobile = res.data.data.mobile;
 						this.qqNum = res.data.data.qq;
 						this.wechat = res.data.data.wechat;
+            this.status= res.data.data.status
 					} else {
 						this.$message.info(res.data.msg);
 					}
@@ -186,10 +198,10 @@
 					this.loading = false;
 				},700)
 			},
-			
-			
+
+
 			gotoEditGu() {
-				this.$urouter.navigateTo('/pages/makeorder/onlineaccount/index?isEdit=1&id=' + this.id);	
+				this.$urouter.navigateTo('/pages/makeorder/onlineaccount/index?isEdit=1&id=' + this.id);
 			}
 		}
 	}
@@ -200,7 +212,7 @@
 		min-height: 100vh;
 		background: #FAFAFC;
 	}
-	
+
 	.statusacross {
 		height: 72rpx;
 		width: 100%;
@@ -216,7 +228,7 @@
 				height: 24rpx;
 			}
 		}
-		
+
 		.statusacrossStatus {
 			margin-left: 24rpx;
 			margin-right: 24rpx;
@@ -224,13 +236,13 @@
 			font-weight: 500;
 			color: #3EC155;
 		}
-		
+
 		.statusacrossRelative {
 			font-size: 24rpx;
 			color: #3EC155;
 		}
 	}
-	
+
 	.myStatusDetailPageGoods {
 		padding: 40rpx 24rpx;
 		background: #fff;
@@ -240,7 +252,7 @@
 			width: 128rpx;
 			height: 128rpx;
 		}
-		
+
 		.myStatusDetailPageGoodsRight {
 			display: flex;
 			flex-direction: column;
@@ -248,14 +260,14 @@
 			height: 128rpx;
 			padding: 15rpx 0;
 			margin-left: 32rpx;
-			
+
 			.myStatusDetailPageGoodsRightTop {
 				font-size: 32rpx;
 				font-weight: 500;
 				color: #36373D;
 				width: 550rpx;
 			}
-			
+
 			.myStatusDetailPageGoodsRightBottom {
 				font-size: 24rpx;
 				font-weight: 400;
@@ -265,19 +277,19 @@
 			}
 		}
 	}
-	
+
 	.myStatusDetailPageItems {
 		padding: 30rpx 0 0;
 		display: flex;
 		align-items: center;
-		
+
 		.myStatusDetailPageItemsLeft {
 			display: flex;
 			align-items: center;
 			width: 164rpx;
 		}
 	}
-	
+
 	.onlinePayBottomBtn {
 		position: fixed;
 		bottom: 40rpx;

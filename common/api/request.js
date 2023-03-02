@@ -54,6 +54,7 @@ export default class Request {
         if (this.testNeedProductUrl(options.url)) {
             options.baseUrl = product_host + '/api';
         } else {
+          console.log(this.config.baseUrl,999)
             options.baseUrl = options.baseUrl || this.config.baseUrl;
         }
         options.dataType = options.dataType || this.config.dataType;

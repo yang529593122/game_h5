@@ -33,6 +33,131 @@
 		}
 	},
 	{
+		"path": "pages/tab/my/business/index",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/index",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/classification",
+		"style": {
+			"app-plus": {
+				"titleNView": {
+					"buttons": [
+						{
+							"text": "搜索",
+							"float": "right",
+							"fontSize": "28rpx",
+							"width":"60rpx"
+						}
+					],
+					"searchInput": {
+						"placeholder": "搜索游戏名称／商品编号／关键字",
+						"align": "left"
+					}
+				}
+			}
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/productList",
+		"style": {
+			"app-plus": {
+				"titleNView": {
+					"buttons": [
+						{
+							"text": "搜索",
+							"float": "right",
+							"fontSize": "28rpx",
+							"width":"60rpx",
+							"color": "#999"
+						}
+					],
+					"searchInput": {
+						"placeholder": "搜索游戏名称／商品编号／关键字",
+						"align": "left"
+					}
+				}
+			}
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/goodDetail",
+		"style": {
+			"navigationBarTitleText": "",
+			"app-plus": {
+				"titleNView": {
+					"buttons": [
+						{
+							"type": "share"
+						}
+					]
+				}
+			}
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/allEvaluate",
+		"style": {
+			"navigationBarTitleText": "全部评论"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/evaluateDetail",
+		"style": {
+			"navigationBarTitleText": "评论详情"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/complaint",
+		"style": {
+			"navigationBarTitleText": "投诉"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/residencyAgreement",
+		"style": {
+			"navigationBarTitleText": "同意商家入驻协议"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/authenticationInfo",
+		"style": {
+			"navigationBarTitleText": "认证信息"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/settlementInformation",
+		"style": {
+			"navigationBarTitleText": "结算信息"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/storeInfo",
+		"style": {
+			"navigationBarTitleText": "店铺信息"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/storeDetail",
+		"style": {
+			"navigationBarTitleText": "店铺主页",
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/tab/tradingMall/informationAudit",
+		"style": {
+			"navigationBarTitleText": "信息审核"
+		}
+	},
+	{
 		"path": "pages/service-message/service/service-detail/index",
 		"style": {
 			"navigationStyle": "custom"
@@ -72,6 +197,7 @@
 					"navigationStyle": "custom"
 				}
 			},
+
 			{
 				// 砍价
 				"path": "kanpay/index",
@@ -184,7 +310,14 @@
 				"style": {
 					"navigationStyle": "custom"
 				}
-			}
+			},
+      {
+      	// 最近降价
+      	"path": "shelves/index",
+      	"style": {
+      		"navigationStyle": "custom"
+      	}
+      }
 		]
 	},{
 		"root": "pages/benben-built-in",
@@ -453,7 +586,7 @@
 				"navigationBarTitleText": "收银台",
 				"navigationStyle": "custom"
 			}
-		}, 
+		},
 		{
 			"path": "order-process/pay-order/success",
 			"style": {
@@ -767,6 +900,212 @@
 				}
 			}
 		}]
+	},
+	{
+		"root": "pages/newPage",
+		"pages": [
+			{
+				"path": "/newArrival",
+				"style": {
+					"navigationBarTitleText": "最新上架"
+				}
+			},
+			{
+				"path": "/newsPages",
+				"style": {
+					"navigationBarTitleText": "消息"
+				}
+			},
+			{
+				"path": "/orderNews",
+				"style": {
+					"navigationBarTitleText": "订单消息"
+				}
+			},
+			{
+				"path": "/systemNews",
+				"style": {
+					"navigationBarTitleText": "系统通知"
+				}
+
+			},
+			{
+				"path": "makeFriends/makeFriends",
+				"style": {
+					"navigationBarTitleText": "交U专区",
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "makeFriends/release",
+				"style": {
+					"navigationBarTitleText": "发布"
+				}
+			},
+			{
+				"path": "makeFriends/publishedSocial",
+				"style": {
+					"navigationBarTitleText": "我发布的社交"
+				}
+			},
+			{ //发布的社交-申请列表
+				"path": "makeFriends/applicationList",
+				"style": {
+					"navigationBarTitleText": "申请列表"
+				}
+			},
+			{
+				"path": "makeFriends/postingDetails",
+				"style": {
+					"navigationBarTitleText": "详情"
+				}
+			},
+			{
+				"path": "makeFriends/myhand",
+				"style": {
+					"navigationBarTitleText": "我的交U"
+				}
+			},
+			{
+				"path": "makeFriends/socialContactdetail",
+				"style": {
+					"navigationBarTitleText": "详情"
+				}
+			},
+			{//我的交友-社交详情-社交评价
+				"path": "makeFriends/socialComments",
+				"style": {
+					"navigationBarTitleText": "评价"
+				}
+			},
+			{//我的交友-社交详情-社交评价
+				"path": "makeFriends/applicationDetails",
+				"style": {
+					"navigationBarTitleText": "我收藏的游戏",
+					"app-plus": {
+						"titleNView": {
+							"buttons": [
+								{
+									"text": "编辑",
+									"fontSize": "28rpx",
+									"width":"50px"
+								}
+							]
+						}
+					}
+				}
+			},
+			{//我的交友-社交详情-社交评价
+				"path": "shop/commodityManagement",
+				"style": {
+					"navigationBarTitleText": "商品管理",
+					"app-plus": {
+						"titleNView": {
+							"buttons": [
+								{
+									"text": "添加商品",
+									"color": "#659BC7",
+									"fontSize": "30rpx",
+									"width":"150rpx"
+								}
+							]
+						}
+					}
+				}
+			},
+			{//我的交友-社交详情-社交评价
+				"path": "shop/addItem",
+				"style": {
+					"navigationBarTitleText": "添加商品"
+				}
+			},
+			{//添加规格
+				"path": "shop/addSku",
+				"style": {
+					"navigationBarTitleText": "规格类型"
+				}
+			},
+			{//规格详情
+				"path": "shop/skuDetail",
+				"style": {
+					"navigationBarTitleText": "规格详情"
+				}
+			}
+		]
+	},{
+		"root": "pages/bargaining",
+		"pages": [
+			{
+				"path": "/index",
+				"style": {
+					"navigationStyle": "custom",
+					"navigationBarTitleText": "议价竞拍"
+				}
+			}
+		    ,{
+                    "path" : "/details",
+                    "style" :
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+
+                }
+                ,{
+                    "path" : "pay/pay",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "applyFor/applyFor",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "议价申请",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "participateIn/participateIn",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "我的议价",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "receive/receive",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "我收到的议价",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "confirm/confirm",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "确认订单",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "confirmpay/confirmpay",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "立即支付",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -790,7 +1129,7 @@
 			"text": "首页"
 		},{
 			"pagePath": "pages/tab/saleaccount/index",
-			"text": "选择游戏",
+			"text": "我要买号",
 			"iconPath": "/static/tab/tab1.png",
 			"selectedIconPath": "/static/tab/tab1_active.png"
 		},{
@@ -798,6 +1137,11 @@
 			"text": "我要卖号",
 			"iconPath": "/static/tab/tab2.png",
 			"selectedIconPath": "/static/tab/tab2_active.png"
+		},{
+			"pagePath": "pages/tab/tradingMall/index",
+			"text": "交易商城",
+			"iconPath": "/static/tab/tab5.png",
+			"selectedIconPath": "/static/tab/tab5_active.png"
 		},{
 			"pagePath": "pages/tab/my/my/index",
 			"iconPath": "/static/tab/tab4.png",
