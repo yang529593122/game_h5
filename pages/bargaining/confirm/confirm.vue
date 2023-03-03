@@ -192,7 +192,11 @@
 						<view class="text-sm " style="color: #19212D;">商品金额</view>
 						<view class="text-sm " style="color: #19212D;">￥{{shopGoodsinfo.price}}</view>
 					</view>
-
+          <view class="flex align-center justify-between" style="margin-top: 24rpx;">
+          	<view class="text-sm " style="color: #19212D;">议价定金</view>
+          	<view class="text-sm " style="color: #19212D;" >￥{{shopGoodsinfo.dicker_deposit}}</view>
+          	<!-- this.baoIndex -->
+          </view>
 					<view class="flex align-center justify-between" style="margin-top: 24rpx;">
 						<view class="text-sm " style="color: #19212D;">手续费</view>
 						<view class="text-sm " style="color: #19212D;" v-if="shopGoodsinfo.is_bao === 0">￥{{shopGoodsinfo.ya_fee}}</view>
@@ -289,7 +293,6 @@
 				mobile:'',
 				wechat:'',
         log_id:'',
-        good_detail:null,
 			};
 		},
 		/**
@@ -319,7 +322,7 @@
         }).then(res => {
         	if(res.data.code == 1) {
             this.shopGoodsinfo = res.data.data
-            this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee))).toFixed(2)
+            this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee)-parseFloat(this.shopGoodsinfo.dicker_deposit))).toFixed(2)
         	} else {
         		this.$message.info(res.data.msg);
         	}
@@ -352,10 +355,10 @@
 			},
 			comfirmOrder() {
 
-        this.$urouter.navigateTo(`/pages/bargaining/confirmpay/confirmpay`);
+        // this.$urouter.navigateTo(`/pages/bargaining/confirmpay/confirmpay`);
 
+        // return
 
-        return
 				if(!this.mobile) {
 					this.$message.info('请输入手机号码')
 					return;
@@ -387,54 +390,44 @@
 					}
 				}
 				this.isComfirmLoading = true;
-				let requestParams = {
-					goods_id:this.goods_id,
-					order_no:this.shopGoodsinfo.order_no,
 
-					introducer_no:this.introducer_no,
-					qq:this.qqNum,
-					mobile:this.mobile,
-					wechat:this.wechat
-				}
-				console.debug(this.requestParams,'创建订单')
-				if(this.shopGoodsinfo.is_bao == 1) {
-					requestParams.bao_multiple=this.baopeiList[this.baoIndex].num;
-				}
-				// is_fen:this.isfenqi == 2 ? 0 : 1,
-				// fen_num:
+        let obj = {
+          log_id:this.log_id,
+          order_no:this.shopGoodsinfo.order_no,
+          introducer_no:this.introducer_no,
+          qq:this.qqNum,
+          mobile:this.mobile,
+          wechat:this.wechat,
+        }
+        if( this.shopGoodsinfo.is_bao === 1){
+          console.log(this.shopGoodsinfo.bao_fee[this.baoIndex].num)
+          obj.bao_multiple = this.shopGoodsinfo.bao_fee[this.baoIndex].num
+        }
 
-					if(this.shopGoodsinfo.is_bao == 1) {
-						if(this.shopGoodsinfo.is_fen == 1) {
-							if(this.isfenqi == 2) {
-								requestParams.is_fen = 0
-							}
-							if(this.isfenqi == 1) {
-								requestParams.is_fen = 1;
-								requestParams.fen_num = (this.fenqiOneIndex + 1);
-							}
-						}
-					}
+        if( this.shopGoodsinfo.is_fen === 1){
+          obj.is_fen=this.is_fen
+          obj.fen_num=this.fen_num
+        }
 
-					// if()
-					this.$util.throttle(() => {
-						this.$api.post(global.apiUrls.gamebuynowcommit,requestParams).then(res => {
-							if(res.data.code == 1) {
-								console.debug(res.data,'提交订单')
-								// setTimeout(() => {
-									if(this.shopGoodsinfo.is_bao == 1 && this.isfenqi == 1) {
-										uni.setStorageSync('isfenqi',1);
-										this.$urouter.redirectTo('/pages/order/order-process/pay-order/index?orderNo=' + this.shopGoodsinfo.order_no + '&price=' + this.totalPrice);
-									} else {
-										uni.setStorageSync('isfenqi',2);
-										this.$urouter.redirectTo('/pages/order/order-process/pay-order/index?orderNo=' + this.shopGoodsinfo.order_no + '&price=' + this.totalPrice);
-									}
-								// },700)
-							} else {
-								this.$message.info(res.data.msg);
-							}
-							this.isComfirmLoading = false;
-						})
-					},3000)
+        this.$util.throttle(() => {
+          this.$api.post(global.apiUrls.buy_now_commit,obj).then(res => {
+            if(res.data.code == 1) {
+              this.$urouter.navigateTo(`/pages/bargaining/confirmpay/confirmpay?orderNo=${this.shopGoodsinfo.order_no}`);
+              // // setTimeout(() => {
+              //   if(this.shopGoodsinfo.is_bao == 1 && this.isfenqi == 1) {
+              //     uni.setStorageSync('isfenqi',1);
+              //     this.$urouter.redirectTo('/pages/order/order-process/pay-order/index?orderNo=' + this.shopGoodsinfo.order_no + '&price=' + this.totalPrice);
+              //   } else {
+              //     uni.setStorageSync('isfenqi',2);
+              //     this.$urouter.redirectTo('/pages/order/order-process/pay-order/index?orderNo=' + this.shopGoodsinfo.order_no + '&price=' + this.totalPrice);
+              //   }
+              // // },700)
+            } else {
+              this.$message.info(res.data.msg);
+            }
+            this.isComfirmLoading = false;
+          })
+        },3000)
 			},
 			changeSelect() {
 				this.isSelect = !this.isSelect;
@@ -455,10 +448,10 @@
 			changeBaopei(idx) {
 				this.baoIndex = idx;
 				if(this.isfenqi == 2) {
-					this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee))).toFixed(2)
+					this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee - parseFloat(this.shopGoodsinfo.dicker_deposit)))).toFixed(2)
 				}
 				if(this.isfenqi == 1) {
-					this.totalPrice = Math.round(((parseFloat(this.shopGoodsinfo.price) * 0.4) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee))).toFixed(2)
+					this.totalPrice = Math.round(((parseFloat(this.shopGoodsinfo.price) * 0.4) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee - parseFloat(this.shopGoodsinfo.dicker_deposit)))).toFixed(2)
 				}
 			},
 

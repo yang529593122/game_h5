@@ -6,8 +6,9 @@
 
         <fu-empty-ui v-if="!list.length"></fu-empty-ui>
         <view class="list-content" v-else>
-            <view class="list-item" v-for="item in list">
-              <view class="list-item-top">
+          <!--  -->
+            <view class="list-item" v-for="item in list" >
+              <view class="list-item-top" @click="goDetails(item)">
                 <view class="item-status">
                   <view class="item-num">
                     <view class="item-num-left">
@@ -32,7 +33,7 @@
                   </view> -->
                 </view>
               </view>
-              <view class="item-content">
+              <view class="item-content" @click="goDetails(item)">
                 <view class="item-img">
                   <image :src="item.cover_images[0]" alt="">
                 </view>
@@ -90,7 +91,7 @@
                   <view v-if="item.status===0 || item.status===3 || item.status=== 5 || item.status===6 " @click="lxkf" class="item-btn viewbtn">
                     联系客服
                   </view>
-                  <view v-if="item.status===4" class="item-btn viewbtn" @click="goOrderDetail">
+                  <view v-if="item.status===4" class="item-btn viewbtn" @click="goOrderDetail(item)">
                     订单详情
                   </view>
                 </view>
@@ -138,6 +139,10 @@
     	}
     },
     methods: {
+      goDetails(item){
+
+        this.$urouter.navigateTo(`/pages/bargaining/details?type=yj&goods_id=${item.goods_id}`);
+      },
       toHHmmss (data) {
          var time;
          var hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -156,8 +161,8 @@
         window.location.href = CUSTOMER53URL;
       },
       // 订单详情
-      goOrderDetail(){
-        // /pages/order/order-detail/index?orderNo=B20230103150109022685
+      goOrderDetail(item){
+        this.$urouter.navigateTo(`/pages/order/order-detail/index?orderNo=${item.order_no}`);
       },
       // 获取数据源
       getDatas(parames){

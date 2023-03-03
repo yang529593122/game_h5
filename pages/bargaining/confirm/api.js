@@ -5,5 +5,6 @@ export default {
 	gamesystemarticleinfo : '/v1/62b2becb02fd8',//分期购协议
 	gamebuynowcommit : '/v1/62b995bd44ad6',//立即支付
 	gameagreementSinglePage : '/v1/62e74360aedb1',//
-  get_order_info:'/v1/6400413c46bef'
+  get_order_info:'/v1/6400413c46bef',
+  buy_now_commit:'/v1/640047be7ceea', // 确认支付
 }

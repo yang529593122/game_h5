@@ -7,11 +7,11 @@
 			</view>
 
 			<view class="flex align-center justify-center onlinePayPagePricepay">
-				应付议价定金
+				应支付订单金额
 			</view>
-      <view class="flex align-center justify-center onlinePayPagePricepay">
+     <!-- <view class="flex align-center justify-center onlinePayPagePricepay">
       	议价成功只需支付定金外金额即可
-      </view>
+      </view> -->
 		</view>
 
 		<view class="onlinePayPageSelectPayMethods">
@@ -116,7 +116,7 @@
 							<text
 								style="color: #A23C30;"
 								v-if="item.is_open == 1 && item.is_recommend == 1"
-							> (推荐)</text>
+							> (¥ {{user_money}})</text>
 						</view>
 					</view>
 					<view class="PayMethodsRightStatus">
@@ -157,6 +157,7 @@
 		data() {
 			return {
 				payprice: '0.00',
+        user_money:0,
 				paymethod: 1,
 				confirmPayLoading: false,
 				orderNo: '',
@@ -166,19 +167,31 @@
 		},
 		onLoad(options) {
 			this.orderNo = options.orderNo;
-			this.payprice = options.price;
+			// this.payprice = options.price;
 			// if (!this.timer) {
 			// 	clearInterval(this.timer)
 			// 	this.timer = setInterval(() => {
 			// 		this.dingshiqi();
 			// 	}, 2000)
 			// }
-
 			this.huoquzhifushifoukaitong();
-
+      this.getPrice()
 		},
 
 		methods: {
+      // 获取价格
+      getPrice(){
+        this.$api.post(global.apiUrls.get_order_price, {
+        	order_no: this.orderNo
+        }).then(res => {
+        	if (res.data.code == 1) {
+        		const result = res.data.data
+            console.log(result,9999)
+            this.payprice = result.price
+            this.user_money = result.user_money
+        	}
+        })
+      },
 			dingshiqi() {
 				this.$api.post(global.apiUrls.gamecheckpaystatus, {
 					order_no: this.orderNo
@@ -203,20 +216,14 @@
 				this.$api.post(global.apiUrls.huoquzhifushifoukaitong, ).then(res => {
 					if (res.data.code == 1) {
 						let paymethod = 3;
-
 						for (var i = 0; i < res.data.data.length; i++) {
 							if (res.data.data[i].is_open == 1 && res.data.data[i].is_recommend == 1) {
-								console.log('进来了')
 								paymethod = res.data.data[i].pay_type;
-								console.log(paymethod);
 								break;
 							}
 						}
-						console.debug(this.paymethod, this.requestList)
 						this.paymethod = paymethod;
 						this.requestList = res.data.data;
-
-
 					} else {
 						this.$message.info(res.data.msg);
 					}
@@ -257,7 +264,7 @@
 				}
 			},
 			yuePay() {
-				this.$api.post(global.apiUrls.gamepayorder, {
+				this.$api.post(global.apiUrls.game_pay_order, {
 					pay_type: 3,
 					client_type: 2,
 					order_no: this.orderNo,
@@ -265,13 +272,15 @@
 					if (res.data.code == 1) {
 						uni.redirectTo({
 							// url:'/pages/makeorder/onlinepaysuccess/index?out_trade_no=' + this.orderNo
-							url: '/pages/makeorder/yuesuccess/index'
+							url: '/pages/bargaining/participateIn/participateIn'
 						})
 					} else {
 						this.$message.info(res.data.msg);
 					}
 					this.confirmPayLoading = false;
 				})
+
+
 			},
 			wxPay() {
 				this.$api.post(global.apiUrls.gamepayorder, {
