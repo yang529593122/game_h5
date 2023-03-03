@@ -102,7 +102,7 @@
 							<text class="text-bold text-lg">{{item.total_price}}</text>
 						</view>
 					</view>
-					
+
 					<view class="flex align-center justify-between" style="position: relative;">
 						<!-- 待审核 按钮 start -->
 						<block v-if="current == 1">
@@ -138,7 +138,7 @@
 								</view>
 							</block>
 							<!-- 审核驳回 end -->
-							
+
 							<block v-if="item.audit_status === 1">
 								<view></view>
 								<view class="flex justify-end align-center">
@@ -171,8 +171,14 @@
 								<!-- <view class="text-sm text-weight-500" style="color: #F02525;" @click="showRules = true">
 									失败原因
 								</view> -->
+
 								<view class="text-sm text-weight-500" style="color: #36373D;margin-left: 60rpx;" @click.stop="gotoCustom" >联系客服
 								</view>
+                <view class="text-sm text-weight-500" style="width: 170rpx;
+									height: 60rpx;margin-left: 60rpx;
+									line-height: 60rpx;
+									background: #295B7B; text-align: center;color: #fff;" v-if="!item.is_dicker" @click.stop="participateIn(item)" >参与议价
+                </view>
 								<!-- <view class="text-sm text-weight-500" style="color: #36373D;margin-left: 60rpx;">重新编辑
 								</view> -->
 								<!-- <view class="text-center text-sm text-white text-weight-500" style="width: 170rpx;
@@ -182,11 +188,11 @@
 							</view>
 						</block>
 						<!-- 出售中 end -->
-						
+
 						<block v-if="current === 2">
 							<view></view>
 							<view class="flex justify-end align-center">
-								
+
 								<view @click.stop="gotoCustom" class="text-sm text-weight-500" style="color: #36373D;margin-left: 60rpx;">
 									联系客服</view>
 								<!-- <view class="text-center text-sm text-white text-weight-500" style="width: 170rpx;
@@ -197,7 +203,7 @@
 						</block>
 						<!-- <view style="position: absolute;top: 84rpx;left:-24rpx;box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.16);background: #FFFFFF;width: 144rpx;
 height: 192rpx;" v-if="current == 3">
-						
+
 							<view style="height: 192rpx;width: 144rpx;" class="flex flex-direction justify-around">
 								<view class="text-center text-sm" style="color: #868686;">下架商品</view>
 								<view class="text-center text-sm" style="color: #868686;">修改价格</view>
@@ -316,6 +322,13 @@ background: #295B7B;border-radius: 4rpx;"
 			uni.$off('updateList');
 		},
 		methods: {
+      // 参与议价
+      participateIn(item){
+        console.log(item,999)
+
+       	this.$urouter.navigateTo('/pages/cyprice/cyprice?goods_id='+item.goods_id);
+
+      },
 			gotoPlatformDetail(id,item) {
 				// this.current
 				if(this.current == 1) {
@@ -353,7 +366,7 @@ background: #295B7B;border-radius: 4rpx;"
 				this.showEditPricePopup = false;
 			},
 			confirmEditPricePopup() {
-				
+
 				if(parseFloat(this.xiugaihouprice) < 0) {
 					this.$message.info('价格不能小于零');
 					this.priceIndex = -1;
@@ -362,7 +375,7 @@ background: #295B7B;border-radius: 4rpx;"
 					this.showEditPricePopup = false;
 					return;
 				}
-				
+
 				this.gameuserselleditprice();
 			},
 			gameuserselleditprice() {
@@ -383,7 +396,7 @@ background: #295B7B;border-radius: 4rpx;"
 						this.showEditPricePopup = false;
 						this.$message.info(res.data.msg);
 					}
-					
+
 				})
 			},
 			gotoCustom() {
@@ -417,13 +430,13 @@ background: #295B7B;border-radius: 4rpx;"
 						}
 					}
 				})
-				
+
 			},
 			changeXiajiaIndex(index) {
 				if(this.xiajiaindex === index) {
 					this.xiajiaindex = -1;
 				} else {
-					
+
 					this.xiajiaindex = index;
 				}
 			},

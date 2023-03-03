@@ -83,7 +83,7 @@
 
                 </view>
                 <view class="list-item-btns">
-                  <view class="item-btn" v-if="item.log_status===6">
+                  <view class="item-btn" v-if="item.log_status===6" @click="noagree(item)">
                     拒绝
                   </view>
                   <view v-if="item.log_status===6" class="item-btn viewbtn" @click="agree(item)">
@@ -95,10 +95,10 @@
                   <view v-if="item.log_status===0 || item.log_status===4 " class="item-btn" @click="lxkf">
                     联系客服
                   </view>
-                   <view v-if="item.log_status===0" class="item-btn viewbtn" @click="goOrderDetail">
+                   <view v-if="item.log_status===0" class="item-btn viewbtn" @click="lookDetails(item)">
                      查看商品
                    </view>
-                   <view v-if="item.log_status===4" class="item-btn viewbtn" @click="goOrderDetail">
+                   <view v-if="item.log_status===4" class="item-btn viewbtn" @click="goOrderDetail(item)">
                      订单详情
                    </view>
                 </view>
@@ -119,7 +119,7 @@
         current: 0,
         status: BARGAINING_RECEIVE_NAV_DATAS[0].status,
         BARGAINING_RECEIVE_NAV_DATAS,
-        list:[ ],
+        list:[],
         curPage:1,
         list_rows:5,
         totalPages:1,
@@ -143,8 +143,9 @@
     	}
     },
     methods: {
-
-
+      lookDetails(item){
+        this.$urouter.navigateTo("/pages/bargaining/details?type=yj&goods_id="+item.goods_id);
+      },
       toHHmmss (data) {
          var time;
          var hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -156,6 +157,19 @@
 
       lxkf(){
         window.location.href = CUSTOMER53URL;
+      },
+      // 拒绝
+      noagree(item){
+        this.$api.post(global.apiUrls.refuse_dicker,{
+          log_id:item.log_id
+        }).then(res => {
+          if(res.data.code == 1) {
+              const result = res.data.data
+              this.$urouter.navigateTo("/pages/bargaining/details?type=yj&goods_id="+item.goods_id);
+          } else {
+        	  this.$message.info(res.data.msg);
+          }
+        })
       },
       // 同意
       agree(item){
@@ -171,8 +185,8 @@
         })
       },
       // 订单详情
-      goOrderDetail(){
-        // /pages/order/order-detail/index?orderNo=B20230103150109022685
+      goOrderDetail(item){
+        this.$urouter.navigateTo('/pages/order/order-detail/index?orderNo='+item.order_no);
       },
       // 获取数据源
       getDatas(parames){

@@ -162,7 +162,23 @@
 		"style": {
 			"navigationStyle": "custom"
 		}
-	}],
+	}    ,{
+            "path" : "pages/cyprice/cyprice",
+            "style" :
+            {
+                "navigationStyle": "custom"
+            }
+
+        }
+        ,{
+            "path" : "pages/cyprice/pay/pay",
+            "style" :                                                                                    
+            {
+                "navigationStyle": "custom"
+            }
+            
+        }
+    ],
 	"subPackages": [{
 		"root": "pages/account",
 		"pages": [
@@ -1053,57 +1069,57 @@
                 }
                 ,{
                     "path" : "pay/pay",
-                    "style" :                                                                                    
+                    "style" :
                 {
                     "navigationBarTitleText": "",
                     "enablePullDownRefresh": false
                 }
-                
+
                 }
                 ,{
                     "path" : "applyFor/applyFor",
-                    "style" :                                                                                    
+                    "style" :
                 {
                     "navigationBarTitleText": "议价申请",
                     "enablePullDownRefresh": false
                 }
-                
+
                 }
                 ,{
                     "path" : "participateIn/participateIn",
-                    "style" :                                                                                    
+                    "style" :
                 {
                     "navigationBarTitleText": "我的议价",
                     "enablePullDownRefresh": false
                 }
-                
+
                 }
                 ,{
                     "path" : "receive/receive",
-                    "style" :                                                                                    
+                    "style" :
                 {
                     "navigationBarTitleText": "我收到的议价",
                     "enablePullDownRefresh": false
                 }
-                
+
                 }
                 ,{
                     "path" : "confirm/confirm",
-                    "style" :                                                                                    
+                    "style" :
                 {
                     "navigationBarTitleText": "确认订单",
                     "enablePullDownRefresh": false
                 }
-                
+
                 }
                 ,{
                     "path" : "confirmpay/confirmpay",
-                    "style" :                                                                                    
+                    "style" :
                 {
                     "navigationBarTitleText": "立即支付",
                     "enablePullDownRefresh": false
                 }
-                
+
                 }
             ]
 	}],

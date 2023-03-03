@@ -322,6 +322,7 @@
         }).then(res => {
         	if(res.data.code == 1) {
             this.shopGoodsinfo = res.data.data
+            this.fenqiList = res.data.data.fen_list
             this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee)-parseFloat(this.shopGoodsinfo.dicker_deposit))).toFixed(2)
         	} else {
         		this.$message.info(res.data.msg);
@@ -354,11 +355,6 @@
 				})
 			},
 			comfirmOrder() {
-
-        // this.$urouter.navigateTo(`/pages/bargaining/confirmpay/confirmpay`);
-
-        // return
-
 				if(!this.mobile) {
 					this.$message.info('请输入手机号码')
 					return;
@@ -400,13 +396,13 @@
           wechat:this.wechat,
         }
         if( this.shopGoodsinfo.is_bao === 1){
-          console.log(this.shopGoodsinfo.bao_fee[this.baoIndex].num)
           obj.bao_multiple = this.shopGoodsinfo.bao_fee[this.baoIndex].num
         }
 
-        if( this.shopGoodsinfo.is_fen === 1){
-          obj.is_fen=this.is_fen
-          obj.fen_num=this.fen_num
+        if( this.isfenqi === 1){
+          let fen_num = this.fenqiOneIndex+1
+          obj.is_fen=this.isfenqi
+          obj.fen_num=fen_num
         }
 
         this.$util.throttle(() => {
@@ -435,6 +431,7 @@
 			//改变期数
 			changeQishu(idx) {
 				this.fenqiOneIndex = idx;
+
 				this.fenqiTwoList = this.fenqiList[idx];
 			},
 
@@ -459,10 +456,11 @@
 			changeFenqi(idx) {
 				this.isfenqi = idx;
 				if(idx == 2) {
-					this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee))).toFixed(2)
+					this.totalPrice = Math.round((parseFloat(this.shopGoodsinfo.price) + parseFloat(this.shopGoodsinfo.bao_fee[this.baoIndex].fee-parseFloat(this.shopGoodsinfo.dicker_deposit)))).toFixed(2)
 				}
 				if(idx == 1) {
-					this.totalPrice = Math.round(((parseFloat(this.shopGoodsinfo.price) * 0.4) + parseFloat(this.shopGoodsinfo.bao_fee[idx].fee))).toFixed(2)
+          this.fenqiTwoList = this.fenqiList[0];
+					this.totalPrice = Math.round(((parseFloat(this.shopGoodsinfo.price) * 0.4) + parseFloat(this.shopGoodsinfo.bao_fee[idx].fee-parseFloat(this.shopGoodsinfo.dicker_deposit)))).toFixed(2)
 				}
 			}
 		}

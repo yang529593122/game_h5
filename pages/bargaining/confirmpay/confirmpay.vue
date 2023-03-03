@@ -158,7 +158,7 @@
 			return {
 				payprice: '0.00',
         user_money:0,
-				paymethod: 1,
+				paymethod: 3,
 				confirmPayLoading: false,
 				orderNo: '',
 				requestList: [],
@@ -186,7 +186,6 @@
         }).then(res => {
         	if (res.data.code == 1) {
         		const result = res.data.data
-            console.log(result,9999)
             this.payprice = result.price
             this.user_money = result.user_money
         	}
@@ -241,7 +240,6 @@
 				})
 			},
 			changePayMethods(idx, item) {
-				console.debug(item, 'item')
 				if (item.is_open === 0) {
 					this.$message.info(item.name + '暂未开通')
 					return;
