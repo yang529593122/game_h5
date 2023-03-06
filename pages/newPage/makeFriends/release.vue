@@ -1,11 +1,11 @@
 <template>
-	<view class="content">
+	<view class="content" v-if="initData">
 		<view class="release-info-up">
 			<view class="release-item">
-				<input type="text" placeholder="填写标题会有更多人浏览哦~">
+				<input type="text" v-model="title" placeholder="填写标题会有更多人浏览哦~">
 			</view>
 			<view class="release-item release-items">
-				<textarea  placeholder="请填写自我介绍~"  cols="30" rows="10"></textarea>
+				<textarea  placeholder="请填写自我介绍~" v-model="introduce"  cols="30" rows="10"></textarea>
 			</view>
 			<view class="release-item release-items release-item1">
 				<view class="upload-text">上传图片</view>
@@ -25,15 +25,15 @@
 			</view>
 			<view class="release-item">
 				<view><text class="stars">*</text> QQ号码</view>
-				<input type="text" placeholder="请输入">
+				<input type="text" v-model="qq" placeholder="请输入">
 			</view>
 			<view class="release-item">
 				<view>手机号码</view>
-				<input type="text" placeholder="请输入">
+				<input type="text" v-model="phone" placeholder="请输入">
 			</view>
 			<view class="release-item">
 				<view>微信号码</view>
-				<input type="text" placeholder="请输入">
+				<input type="text" v-model="wechat" placeholder="请输入">
 			</view>
 			<view class="tips">
 				说明：为了平台交友安全，交友
@@ -43,9 +43,9 @@
 				10元交友费，为了平台交友安全，交友需支付10元交友费，
 				为了平台交友安全，交友需支付10元交友费，
 			</view>
-			<button class="btns">发布￥100</button>
+			<button class="btns" @click="subOrder">发布￥{{ initData.publish_price || 0}}</button>
 		</view>
-		
+
 		<benben-popup v-model="popupShow" mode="bottom">
 			<view class="popup">
 				<view class="popup-title">
@@ -68,7 +68,7 @@
 				</view>
 				<view class="select-list">
 					<view class="select-item" :class="{'select-active':select==item}" v-for="item in 10" :key="item">
-						王者荣耀 
+						王者荣耀
 						<image src="/static/newPage/13.png" mode="aspectFill"></image>
 					</view>
 				</view>
@@ -83,12 +83,56 @@
 		components:{benbenPopup},
 		data() {
 			return {
+        initData:null,
+        title:'',// 标题
+        introduce:"",//介绍
+        images:"" ,//图片集
+        phone:"",
+        qq:'',
+        wechat:"",
 				tab: 1,
 				popupShow:false,
 				select:1,
+        resultData:null,
 			}
 		},
+    onLoad() {
+      this.init()
+    },
 		methods: {
+      // 获取发布配置信息
+      init(){
+        this.$api.post(global.apiUrls.friends_get_friend_config).then(res=>{
+          console.log(res,9999)
+          if (res.data.code === '1') {
+            const result = res.data.data
+            this.initData = result
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
+      // 点击发布
+      subOrder(){
+        this.$api.post(global.apiUrls.friends_publish, {
+          title:'你好',// 标题
+          tabs:'1,2',
+          introduce:'askdjh',//介绍
+          images:"" ,//图片集
+          phone:"",
+          qq:'529593132',
+          wechat:'123',
+          price:'0.01' ,
+        }).then(res => {
+          if (res.data.code === '1') {
+            const result = res.data.data
+            this.$urouter.navigateTo(`/pages/newPage/makeFriends/pay?orderNo=${result.order_sn}`);
+          } else {
+            this.$message.info(res.data.msg);
+          }
+          this.popupShow = false
+        })
+      },
 			getActive(index) {
 				this.tab = index;
 			},
@@ -97,7 +141,7 @@
 			},
 			// 选择
 			getselect(){
-				
+
 			}
 		}
 	}
@@ -108,24 +152,24 @@
 		background: #fff;
 	}
 	.content{
-		
+
 		.release-info-up {
 			padding: 0 32rpx;
-			
+
 			.release-item {
 				display:flex;
 				justify-content: space-between;
 				align-items: center;
 				padding:32rpx 0;
 				border-bottom: 1rpx solid #EEEEEE;
-				
+
 				input {
 					font-size: 28rpx;
 					color: #333;
 					font-weight: 500;
 				}
 			}
-			
+
 			.release-items{
 				border-bottom: none;
 			}
@@ -134,16 +178,16 @@
 				flex-direction: column;
 				justify-content: flex-start;
 				align-items: flex-start;
-				
+
 				.upload-text{
 					font-size: 28rpx;
 					color: #333;
 					margin-bottom: 24rpx;
 				}
-				
+
 				.release-img-list {
 					width: 100%;
-					
+
 					image{
 						width: 140rpx;
 						height: 140rpx;
@@ -151,12 +195,12 @@
 				}
 			}
 		}
-		
+
 		.line {
 			height: 20rpx;
 			background: #FAFAFC;
 		}
-		
+
 		.release-info-down {
 			padding: 0 32rpx 32rpx;
 			.release-item {
@@ -165,14 +209,14 @@
 				align-items: center;
 				padding:32rpx 0;
 				border-bottom: 1rpx solid #EEEEEE;
-				
+
 				input {
 					text-align: right;
 				}
 				view {
 					font-size: 32rpx;
 					color: #36373D;
-					
+
 					.stars {
 						color: #F02525;
 						margin-right: 20rpx;
@@ -194,7 +238,7 @@
 				margin-top: 10rpx;
 				margin-bottom: 56rpx;
 			}
-			
+
 			.btns {
 				width: 100%;
 				line-height: 88rpx;
@@ -202,11 +246,11 @@
 				color: #fff;
 			}
 		}
-		
+
 		.popup{
 			background: #fff;
 			border-radius: 16rpx 16rpx 0 0;
-			
+
 			.popup-title {
 				padding: 0 32rpx;
 				line-height: 110rpx;
@@ -240,7 +284,7 @@
 					justify-content: space-between;
 					align-items: center;
 					padding-top: 40rpx;
-					
+
 					.types-item {
 						width: 600rpx;
 						display: flex;
@@ -253,7 +297,7 @@
 							font-size: 28rpx;
 						}
 					}
-					
+
 					image {
 						width: 32rpx;
 						height: 32rpx;
@@ -279,7 +323,7 @@
 				align-items: center;
 				flex-wrap: wrap;
 				padding: 32rpx 24rpx;
-				
+
 				.select-item {
 					background: #F8F8F8;
 					color: #36373D;
@@ -290,7 +334,7 @@
 					font-size: 28rpx;
 					margin-right: 16rpx;
 					margin-bottom: 16rpx;
-					
+
 					image{
 						width: 28rpx;
 						height: 28rpx;

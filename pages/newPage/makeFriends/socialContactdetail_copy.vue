@@ -30,7 +30,35 @@
           <image v-for="item in details.images" :key="item" :src="item" mode=""></image>
         </view>
       </view>
-
+      <view class="line"></view>
+      <view class="make-friends-apply">
+        <view class="make-friends-tips">交友申请</view>
+        <view class="apply-user">
+          <view class="apply-user-info">
+            <image src="/static/newPage/49.png" mode="aspectFill"></image>
+            <view class="user-info">
+              <view class="user-name">住8楼的姐姐</view>
+              <view class="release-time">07-15 12:00</view>
+            </view>
+          </view>
+          <view class="apply-status">已同意</view>
+        </view>
+        <view class="apply-content">
+          {{ details.introduce }}
+        </view>
+        <view class="apply-img">
+          <image v-for="item in 3" :key="item" src="/static/newPage/1.png" mode=""></image>
+        </view>
+        <view class="contact-us">
+          <view class="contact-tips">
+            <text class="vertical-bar"></text>
+            <text>联系方式</text>
+          </view>
+          <view class="apply-item">QQ号码 689897858</view>
+          <view class="apply-item">QQ号码 689897858</view>
+          <view class="apply-item">QQ号码 689897858</view>
+        </view>
+      </view>
       <view class="line"></view>
       <view class="commont" v-if="details.total_comment">
         <view class="commont-num">评论 ({{ details.total_comment }})</view>
@@ -47,8 +75,8 @@
       </view>
       <view style="height: 120rpx;"></view>
       <view class="btns">
-        <image src="/static/newPage/14.png" mode="aspectFill"></image>
-        <text @click="handleJump" data-url="/pages/newPage/makeFriends/submitfiiends">交朋友</text>
+        <!-- <image src="/static/newPage/14.png" mode="aspectFill"></image> -->
+        <text @click="handleJump" data-url="/pages/newPage/makeFriends/socialComments">去评价</text>
       </view>
 
     </block>

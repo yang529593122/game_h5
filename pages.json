@@ -172,11 +172,11 @@
         }
         ,{
             "path" : "pages/cyprice/pay/pay",
-            "style" :                                                                                    
+            "style" :
             {
                 "navigationStyle": "custom"
             }
-            
+
         }
     ],
 	"subPackages": [{
@@ -952,6 +952,28 @@
 					"navigationStyle": "custom"
 				}
 			},
+      {
+      	"path": "makeFriends/submitfiiends",
+      	"style": {
+      		"navigationBarTitleText": "交朋友",
+      		"navigationStyle": "custom"
+      	}
+      },
+      
+      {
+      	"path": "makeFriends/pay",
+      	"style": {
+      		"navigationBarTitleText": "立即支付",
+      		"navigationStyle": "custom"
+      	}
+      },
+      {
+      	"path": "makeFriends/paysuccess",
+      	"style": {
+      		"navigationBarTitleText": "支付结果",
+      		"navigationStyle": "custom"
+      	}
+      },
 			{
 				"path": "makeFriends/release",
 				"style": {
@@ -1047,7 +1069,8 @@
 					"navigationBarTitleText": "规格详情"
 				}
 			}
-		]
+
+        ]
 	},{
 		"root": "pages/bargaining",
 		"pages": [

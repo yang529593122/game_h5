@@ -37,8 +37,8 @@
     </view>
     <view style="height: 176rpx;"></view>
     <!-- 列表 -->
-    <view class="shop-list" @click.stop="getPath('/pages/newPage/makeFriends/socialContactdetail')">
-      <view class="shop-item" v-for="item in list" :key="item.id">
+    <view class="shop-list">
+      <view class="shop-item" v-for="item in list" :key="item.id"  @click.stop="getPath(`/pages/newPage/makeFriends/socialContactdetail?id=${item.id}`)">
         <image :src="item.cover" mode="aspectFill"></image>
         <view class="shop-name">
           {{ item.title }}
