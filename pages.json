@@ -959,6 +959,13 @@
       		"navigationStyle": "custom"
       	}
       },
+      {
+      	"path": "makeFriends/submitfiiendssuccess",
+      	"style": {
+      		"navigationBarTitleText": "支付结果",
+      		"navigationStyle": "custom"
+      	}
+      },
       
       {
       	"path": "makeFriends/pay",
