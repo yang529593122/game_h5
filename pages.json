@@ -953,12 +953,20 @@
 				}
 			},
       {
-      	"path": "makeFriends/submitfiiends",
+      	"path": "makeFriends/submitfriendspage",
       	"style": {
       		"navigationBarTitleText": "交朋友",
       		"navigationStyle": "custom"
       	}
       },
+      {
+      	"path": "makeFriends/evaluation",
+      	"style": {
+      		"navigationBarTitleText": "评价",
+      		"navigationStyle": "custom"
+      	}
+      },
+
       {
       	"path": "makeFriends/submitfiiendssuccess",
       	"style": {
@@ -966,7 +974,7 @@
       		"navigationStyle": "custom"
       	}
       },
-      
+
       {
       	"path": "makeFriends/pay",
       	"style": {

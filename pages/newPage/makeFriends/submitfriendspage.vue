@@ -8,50 +8,20 @@
     </fu-custom>
 
     <view class="form-content">
-      <textarea class="comment-content" v-model="introduce" placeholder="请输入交友内容" />
+      <textarea class="comment-content" v-model="content" placeholder="请输入交友内容" />
       <!-- 上传图片 -->
       <view class="add-img">
         <view class="add-img-tips">
           <text>添加照片</text>
         </view>
         <view class="img-list">
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
-            <image src="/static/logo.png" mode="aspectFill"></image>
-            <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image>
-          </view>
-          <view class="img-item">
+          <block v-if="images" >
+            <view class="img-item" v-for="item in images" >
+              <image :src="item" mode="aspectFill"></image>
+              <!-- <image class="delete-icon" src="/static/newPage/13.png" mode="aspectFill"></image> -->
+            </view>
+          </block>
+          <view class="img-item" @click="updataImg">
             <image class="add-imgs" src="/static/add-img.png" mode=""></image>
             <image class="delete-icon" v-if="false" src="/static/newPage/13.png" mode="aspectFill"></image>
           </view>
@@ -72,7 +42,7 @@
             QQ号码
           </view>
           <view class="contact-list-item-text">
-            <input type="text" placeholder="请输入QQ号码">
+            <input v-model="qq" type="text"  placeholder="请输入QQ号码">
           </view>
         </view>
         <view class="contact-list-item">
@@ -80,7 +50,7 @@
             手机号码
           </view>
           <view class="contact-list-item-text">
-            <input type="text" placeholder="请输入手机号码">
+            <input v-model="phone" type="text"  placeholder="请输入手机号码">
           </view>
         </view>
         <view class="contact-list-item">
@@ -88,7 +58,7 @@
             微信号码
           </view>
           <view class="contact-list-item-text">
-            <input type="text" placeholder="请输入微信号码">
+            <input v-model="wechat" type="text"  placeholder="请输入微信号码">
           </view>
         </view>
         <view class="contact-list-item">
@@ -96,7 +66,7 @@
             交友金额
           </view>
           <view class="contact-list-item-text contact-list-item-text-end">
-            <input type="text" placeholder="请输入" disabled value="¥ 280.00">
+            <view>¥ {{ price }}</view>
           </view>
         </view>
       </view>
@@ -172,23 +142,125 @@
 </template>
 
 <script>
+import {validate,UploadImage} from '@/common/utils/index.js'
 export default {
 		data() {
 			return {
-				introduce:'1'
+        id:"",
+				content:'',
+        images:[],
+        phone:"",
+        qq:"",
+        wechat:"",
+        price:"",
 			}
 		},
 		onLoad(options) {
-			this.type = options.type;
-      console.log(options)
+			this.id = options.id;
+      uni.$on("uPicCropper", (path) => {
+        this.uploadUserImg(path);
+      });
+      this.init()
 		},
+    onUnload() {
+      // 关闭当前页面的监听事件
+      uni.$off("uPicCropper");
+    },
 		methods:{
-			submitEventPay() {
+      async init(){
+         const data = await  this.$api.post(global.apiUrls.friends_get_friend_config)
+         const result = data.data
+         if (result.code == 1) {
+           console.log(result.data)
+           this.price = result.data.apply_price
+         } else {
+           this.$message.info(result.msg);
+         }
+      },
+      updataImg(){
+        uni.chooseImage({
+          count: 1,
+          sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ["album"], // 可以指定来源是相册还是相机，默认二者都有
+          success: (res) => {
+            // 跳转到图片裁切页面
+            uni.navigateTo({
+              url: `/pages/user/user/avatar-cropping/index?rectHeight=200&rectWidth=200&fileType=jpg&myImgUrl=${res.tempFilePaths[0]}`,
+              animationDuration: 0,
+            });
+          },
+        });
+      },
+      uploadUserImg(blob) {
+        uni.showLoading();
+        let _this = this;
+        // 开始上传
+        new UploadImage([blob], {
+          complete: function (res) {
+            uni.hideLoading();
+            if (res.length) {
+              _this.images =[..._this.images,res[0].path]
+              console.log( _this.images,9999)
+            }
+          },
+        });
+      },
+			async submitEventPay() {
+        if(!this.content.trim()) {
+        	this.$message.info('请输入交友内容')
+        	return;
+        }
+        if(!this.qq) {
+        	this.$message.info('请输入联系QQ')
+        	return;
+        }
+
+        if(!validate(this.phone,'phone')) {
+        	this.$message.info('手机号格式有误,请重新输入')
+        	return;
+        }
+        if(!this.wechat) {
+        	this.$message.info('请输入联系微信')
+        	return;
+        }
         console.log("立即支付")
-        this.$urouter.navigateTo(`/pages/newPage/makeFriends/submitfiiendssuccess`);
-        
-			}
-		}
+
+        if(this.images.length){
+
+        }
+
+
+       const data = await this.$api.post(global.apiUrls.friends_friends_apply,{
+          id:this.id,
+          content:this.content,
+          images:this.images.length ? this.images.join() : "",
+          phone:this.phone,
+          qq:this.qq,
+          wechat:this.wechat,
+          price:this.price
+        })
+        const result = data.data
+        if (result.code == 1) {
+        // 支付
+         this.pay(result.data)
+        } else {
+          this.$message.info(result.msg);
+        }
+			},
+      async pay(obj){
+        const data = await this.$api.post(global.apiUrls.game_pay_order,{
+           pay_type:3,
+           client_type:2,
+           order_no:obj.order_sn,
+         })
+         const result = data.data
+         if (result.code == 1) {
+          this.$urouter.navigateTo(`/pages/newPage/makeFriends/submitfiiendssuccess`);
+         } else {
+           this.$message.info(result.msg);
+         }
+      }
+    }
 	}
 </script>
 

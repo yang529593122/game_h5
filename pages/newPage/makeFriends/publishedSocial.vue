@@ -32,7 +32,7 @@
 					</view>
 				</view>
 				<view class="btns">
-					<button class="apply" v-if="item.status === 1" @click="handleJump"	data-url="/pages/newPage/makeFriends/applicationList">申请列表</button>
+					<button class="apply" v-if="item.status === 1" @click="handleJump"	:data-url="`/pages/newPage/makeFriends/applicationList?id=${item.id}`">申请列表</button>
 					<button class="apply refuse" v-if="item.status === 2">拒绝原因</button>
 					<button class="look" @click="handleJump" :data-url="`/pages/newPage/makeFriends/postingDetails?id=${item.id}`">查看详情</button>
 				</view>

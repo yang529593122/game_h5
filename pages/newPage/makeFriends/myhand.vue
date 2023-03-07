@@ -1,20 +1,23 @@
 <template>
 	<view class="content">
 		<view class="list">
-			<view class="item" v-for="item in 10" :key="item">
+			<view class="item" v-for="item in list" :key="item.id">
 				<view class="time-item">
-					<view class="times">提交日期：2022-09-12 12:00:00</view>
-					<view style="status">待审核</view>
+					<view class="times">提交日期：{{ item.create_time }}</view>
+          <!-- 0=待审核；1=已同意；2=已拒绝 -->
+					<view style="status" v-if="item.status === 0">待对方确认</view>
+          <view style="status" v-if="item.status === 1">对方已同意</view>
+          <view style="status" v-if="item.status === 2">对方已拒绝</view>
 				</view>
 				<view class="resele">
 					<view class="resele-title">
-						你在王者累计氪的钱，换到现实能买什么？
+						{{ item.title }}
 					</view>
 				</view>
 				<view class="btns">
-					<button class="apply refuse">去评价</button>
-					<button class="look" @click="handleJump"
-					data-url="/pages/newPage/makeFriends/socialContactdetail">查看详情</button>
+          <button class="apply refuse" v-if="item.status === 1"  @click="handleJump(item)">查看详情</button>
+					<button class=" look" v-if="item.status === 1" @click="handleComment(item)">去评价</button>
+					<button class="look" v-if="item.status === 0 || item.status === 2" @click="handleJump(item)">查看详情</button>
 				</view>
 			</view>
 		</view>
@@ -25,23 +28,42 @@
 	export default{
 		data(){
 			return{
-				active:1,
+				list:[],
 			}
 		},
+    onLoad() {
+      this.init();
+    },
 		methods:{
-			getTab(index){
-				// 切换tab
-				this.active = index;
-			}
-		}
+      async init(){
+         const data = await this.$api.post(global.apiUrls.friends_my_apply,{
+           type:"-1",
+         })
+         const result = data.data
+         if (result.code == 1) {
+           console.log(result.data)
+           this.list = result.data.data
+         } else {
+           this.$message.info(result.msg);
+         }
+      },
+      handleJump(item){
+        this.$urouter.navigateTo(`/pages/newPage/makeFriends/socialContactdetail?id=${item.id}&from=myjy`);
+      },
+      handleComment(item){
+        this.$urouter.navigateTo(`/pages/newPage/makeFriends/socialContactdetail?id=${item.id}&from=myjy`);
+      }
+
+
+    }
 	}
 </script>
 
 <style lang="scss">
 	.content {
-		
-		
-		
+
+
+
 		.list {
 			padding: 24rpx;
 			.item {

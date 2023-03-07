@@ -10,16 +10,22 @@
 			<view class="release-item release-items release-item1">
 				<view class="upload-text">上传图片</view>
 				<view class="release-img-list">
-					<image src="/static/add-img.png" mode="aspectFill"></image>
+          <view class="release-img-list-item" v-for="item in images">
+            <image :src="item" mode="aspectFill"></image>
+          </view>
+          <view class="release-img-list-item" @click="updataImgFn">
+            <image src="/static/add-img.png" mode="aspectFill"></image>
+          </view>
 				</view>
 			</view>
 		</view>
 		<view class="line"></view>
 		<view class="release-info-down">
-			<view class="release-item" @click="popupShow=true">
+			<view class="release-item" @click="selectTags ">
 				<view>选择标签</view>
 				<view class="select-text">
-					<text>请选择</text>
+					<text v-if="!tabsNames">请选择</text>
+          <text v-else>{{ tabsNames }}</text>
 					<image src="/static/my/arr.png" mode="aspectFill"></image>
 				</view>
 			</view>
@@ -35,31 +41,38 @@
 				<view>微信号码</view>
 				<input type="text" v-model="wechat" placeholder="请输入">
 			</view>
-			<view class="tips">
-				说明：为了平台交友安全，交友
-				需支付10元交友费，为了平台交友安全，交友
-				需支付10元交友费，为了平台交友安全，交友需
-				支付10元交友费，为了平台交友安全，交友需支付
-				10元交友费，为了平台交友安全，交友需支付10元交友费，
-				为了平台交友安全，交友需支付10元交友费，
-			</view>
+			<view class="tips" v-html="column"></view>
 			<button class="btns" @click="subOrder">发布￥{{ initData.publish_price || 0}}</button>
 		</view>
 
 		<benben-popup v-model="popupShow" mode="bottom">
 			<view class="popup">
 				<view class="popup-title">
-					<text class="cancel" @click.stop="popupShow=false">取消</text>
+					<text class="cancel" @click.stop="cancelFn" >取消</text>
 					<text class="pop-title">选择标签</text>
-					<text class="getyes" @click.stop="getYes">确定</text>
+					<text class="getyes" @click.stop="determine">确定</text>
 				</view>
 				<view class="game-type">
-					<view class="type-list" v-for="item in 4" :key="item">
-						<view class="types-item">
-							<text v-for="item in 3" :key="item">王者荣耀</text>
-						</view>
-						<image @click="getselect(item)" src="/static/newPage/11.png" mode="aspectFill"></image>
+					<view class="type-list">
+            <view class="type-list-item " :class=" index === first_order_index ? 'activedColorText':'' " v-for="(item,index) in first_order" :key="item.id" @click="selectFirst(item,index)">
+              {{ item.name }}
+            </view>
 					</view>
+          <view class="type-list">
+            <view class="type-list-item" :class=" index === second_level_index ? 'activedColorText':'' "  v-for="(item,index)  in second_level" :key="item.id" @click="selectSecond(item,index)" >
+              {{ item.name }}
+            </view>
+          </view>
+          <view class="type-list">
+            <view class="type-list-item type-list-item-select "  v-for="(item,index) in tertiary" :key="item.id">
+               <view class="type-list-item-title">
+                 {{ item.name }}
+               </view>
+               <image v-if="!item.status" @click="getselect(item,index)" src="/static/newPage/11.png" mode="aspectFill"></image>
+               <image v-else  @click="getselect(item,index)" src="/static/newPage/12.png" mode="aspectFill"></image>
+            </view>
+          </view>
+
 				</view>
 				<view class="line"></view>
 				<view class="my-select">
@@ -67,8 +80,8 @@
 					<text>至少选择1个，最多选择6个</text>
 				</view>
 				<view class="select-list">
-					<view class="select-item" :class="{'select-active':select==item}" v-for="item in 10" :key="item">
-						王者荣耀
+					<view class="select-item" :class="{'select-active':select==100}" v-for="(item,index) in my_selected_list" :key="item.id">
+						{{ item.name }}
 						<image src="/static/newPage/13.png" mode="aspectFill"></image>
 					</view>
 				</view>
@@ -79,6 +92,7 @@
 
 <script>
 	import benbenPopup from '@/components/benben-popup/benben-popup.vue'
+  import {validate,UploadImage} from '@/common/utils/index.js'
 	export default {
 		components:{benbenPopup},
 		data() {
@@ -94,16 +108,48 @@
 				popupShow:false,
 				select:1,
         resultData:null,
+        column:'',
+        tabsNames:'',
+
+        tagsDatas:null,
+
+        first_order:[],
+        first_order_index:null,
+        second_level:[],
+        second_level_index:null,
+        tertiary:[],
+        my_selected_list:[],
 			}
 		},
     onLoad() {
+      uni.$on("uPicCropper", (path) => {
+        this.uploadUserImg(path);
+      });
       this.init()
+      this.getColumn()
+      this.getTagsDatas()
+    },
+    onUnload() {
+      // 关闭当前页面的监听事件
+      uni.$off("uPicCropper");
     },
 		methods: {
+      // 获取文字说明
+
+      getColumn(){
+        this.$api.post(global.apiUrls.operation_get_column,{ category_id:25 }).then(res=>{
+          if (res.data.code === '1') {
+            const result = res.data.data
+            this.column = result.content
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
+
       // 获取发布配置信息
       init(){
         this.$api.post(global.apiUrls.friends_get_friend_config).then(res=>{
-          console.log(res,9999)
           if (res.data.code === '1') {
             const result = res.data.data
             this.initData = result
@@ -112,17 +158,66 @@
           }
         })
       },
+      // 上传图片
+      updataImgFn(){
+        uni.chooseImage({
+          count: 1,
+          sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ["album"], // 可以指定来源是相册还是相机，默认二者都有
+          success: (res) => {
+            // 跳转到图片裁切页面
+            uni.navigateTo({
+              url: `/pages/user/user/avatar-cropping/index?rectHeight=200&rectWidth=200&fileType=jpg&myImgUrl=${res.tempFilePaths[0]}`,
+              animationDuration: 0,
+            });
+          },
+        });
+      },
+      uploadUserImg(blob) {
+        uni.showLoading();
+        let _this = this;
+        // 开始上传
+        new UploadImage([blob], {
+          complete: function (res) {
+            uni.hideLoading();
+            if (res.length) {
+              _this.images =[..._this.images,res[0].path]
+            }
+          },
+        });
+      },
+      //
+      determine(){
+        this.popupShow = false
+        let arr =[]
+        this.my_selected_list.forEach(item => arr.push(item.name))
+        this.tabsNames = arr.join()
+
+      },
+      cancelFn(){
+        this.popupShow = false
+        this.first_order_index=null,
+        this.second_level = [],
+        this.second_level_index=null,
+        this.tertiary = []
+        this.my_selected_list=[]
+        this.tabsNames = ''
+      },
       // 点击发布
       subOrder(){
+        let arr =[]
+        if(this.my_selected_list.length > 0) {
+          this.my_selected_list.forEach(item => arr.push(item.id) )
+        }
         this.$api.post(global.apiUrls.friends_publish, {
-          title:'你好',// 标题
-          tabs:'1,2',
-          introduce:'askdjh',//介绍
-          images:"" ,//图片集
-          phone:"",
-          qq:'529593132',
-          wechat:'123',
-          price:'0.01' ,
+          title:this.title,// 标题
+          tabs: arr.length > 0 ? arr.join() : '',
+          introduce:this.introduce,//介绍
+          images:this.images.length ? this.images.join() : "" ,//图片集
+          phone:this.phone,
+          qq:this.qq,
+          wechat:this.wechat,
+          price:this.initData.publish_price ,
         }).then(res => {
           if (res.data.code === '1') {
             const result = res.data.data
@@ -139,9 +234,103 @@
 			getYes(e){
 				console.log(e);
 			},
+      // 获取标签列表
+      async getTagsDatas(){
+       const data = await  this.$api.post(global.apiUrls.friends_tab_list)
+       const result = data.data.data
+       console.log(result,999)
+       this.tagsDatas = result
+       // 一级分类
+       let First_order = []
+       result.forEach(item => {
+          First_order.push({
+            id:item.id,
+            name:item.name,
+            pid:item.pid
+          })
+       })
+       this.first_order = First_order
+     },
+     // 选择一级
+     selectFirst(item,index){
+       this.first_order_index = index
+       this.second_level_index = null
+       this.tertiary = []
+       let second_level = []
+        this.tagsDatas[index].children.forEach(item => {
+           second_level.push({
+             id:item.id,
+             name:item.name,
+             pid:item.pid
+           })
+        })
+        this.second_level = second_level
+     },
+     // 选择二级
+     selectSecond(item,index){
+        this.second_level_index = index
+       let tertiary = []
+        this.tagsDatas[this.first_order_index].children[index].children.forEach(item => {
+           tertiary.push({
+             id:item.id,
+             name:item.name,
+             pid:item.pid,
+             status:false
+           })
+        })
+        this.tertiary = tertiary
+     },
+      // 选择标签
+      selectTags(){
+        this.popupShow = true
+      },
+      unique(songs){
+           let result = {};
+           let finalResult=[];
+           for(let i=0;i<songs.length;i++){
+               result[songs[i].id]=songs[i];
+               //因为songs[i].name不能重复,达到去重效果,且这里必须知晓"name"或是其他键名
+           }
+           //console.log(result);{"羽根":{name:"羽根",artist:"air"},"晴天":{name:"晴天",artist:"周杰伦"}}
+           //现在result内部都是不重复的对象了，只需要将其键值取出来转为数组即可
+           for(item in result){
+               finalResult.push(result[item]);
+           }
+           //console.log(finalResult);[{name:"羽根",artist:"air"},{name:"晴天",artist:"周杰伦"}]
+           return finalResult;
+       },
+        unique(arr) {
+         let map = new Map();
+         for (let item of arr) {
+           if (!map.has(item.id)) {
+             map.set(item.id, item);
+           }
+         }
+         return [...map.values()];
+       },
 			// 选择
-			getselect(){
+			getselect(itemData,index){
 
+        if(this.my_selected_list.length >= 6){
+          return
+        }
+        this.tertiary[index].status = !this.tertiary[index].status
+
+        if(this.tertiary[index].status){
+          if(this.my_selected_list.length===0){
+            this.my_selected_list.push(this.tertiary[index])
+          }else{
+            let arr = []
+            this.tertiary.forEach(v => v.status ? arr.push(v) : '')
+            this.my_selected_list =  [...this.my_selected_list,...arr]
+             const asdf = this.unique(this.my_selected_list)
+             this.my_selected_list = [...asdf]
+          }
+
+        }else{
+            const flag =  this.my_selected_list.indexOf(v => v.id === this.tertiary[index].id);
+            this.my_selected_list.splice(flag,1)
+        }
 			}
 		}
 	}
@@ -152,7 +341,9 @@
 		background: #fff;
 	}
 	.content{
-
+    .activedColorText{
+      color: red;
+    }
 		.release-info-up {
 			padding: 0 32rpx;
 
@@ -186,11 +377,14 @@
 				}
 
 				.release-img-list {
-					width: 100%;
-
+          display: grid;
+          grid-template-columns: repeat(4,1fr);
+          grid-column-gap: 20rpx;
+          grid-row-gap: 20rpx;
 					image{
-						width: 140rpx;
-						height: 140rpx;
+            display: block;
+						width: 156rpx;
+						height: 160rpx;
 					}
 				}
 			}
@@ -209,7 +403,6 @@
 				align-items: center;
 				padding:32rpx 0;
 				border-bottom: 1rpx solid #EEEEEE;
-
 				input {
 					text-align: right;
 				}
@@ -279,24 +472,38 @@
 			}
 			.game-type{
 				padding: 0 32rpx 32rpx;
+        display: flex;
+        justify-content: space-between;
 				.type-list {
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-					padding-top: 40rpx;
+          .type-list-item{
+            line-height: 60rpx;
+            height: 60rpx;
+            &.type-list-item-select{
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              .type-list-item-title{
+                padding-right: 20rpx;
+              }
+            }
+          }
+					// display: flex;
+					// justify-content: space-between;
+					// align-items: center;
+					// padding-top: 40rpx;
 
-					.types-item {
-						width: 600rpx;
-						display: flex;
-						justify-content: space-around;
-						align-items: center;
-						text {
-							display: inline-block;
-							width: 120rpx;
-							color: #333333;
-							font-size: 28rpx;
-						}
-					}
+					// .types-item {
+					// 	width: 600rpx;
+					// 	display: flex;
+					// 	justify-content: space-around;
+					// 	align-items: center;
+					// 	text {
+					// 		display: inline-block;
+					// 		width: 120rpx;
+					// 		color: #333333;
+					// 		font-size: 28rpx;
+					// 	}
+					// }
 
 					image {
 						width: 32rpx;

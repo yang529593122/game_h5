@@ -36,20 +36,19 @@
           评论({{ details.total_comment }})
         </view>
         <view class="pl-contents-list">
-          <view class="pl-contents-list-item">
+          <view class="pl-contents-list-item" v-for="item in details.comment">
             <view class="pl-contents-list-item-img">
-                <image src="./static/1.png" mode="aspectFill"></image>
+                <image :src="item.head_img" mode="aspectFill"></image>
             </view>
             <view class="pl-contents-list-item-text">
                 <view class="pl-contents-list-item-title">
-                  你好
+                  {{ item.user_nickname }}
                 </view>
                 <view class="pl-contents-list-item-mess">
-                  就被我看见啊还是给大家啥感慨哈萨克就被我看见啊还是给大家啥感慨哈萨克就被我看见啊还是给大家
-                  啥感慨哈萨克就被我看见啊还是给大家啥感慨哈萨克就被我看见啊还是给大家啥感慨哈萨克
+                  {{ item.content }}
                 </view>
                 <view class="pl-contents-list-item-time">
-                  2022-02-02 12:22:22
+                  {{ item.create_time }}
                 </view>
             </view>
           </view>

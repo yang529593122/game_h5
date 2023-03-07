@@ -30,6 +30,8 @@
           <image v-for="item in details.images" :key="item" :src="item" mode=""></image>
         </view>
       </view>
+      
+      
       <view class="line"></view>
       <view class="make-friends-apply">
         <view class="make-friends-tips">交友申请</view>
@@ -59,6 +61,10 @@
           <view class="apply-item">QQ号码 689897858</view>
         </view>
       </view>
+      
+      
+      
+      
       <view class="line"></view>
       <view class="commont" v-if="details.total_comment">
         <view class="commont-num">评论 ({{ details.total_comment }})</view>

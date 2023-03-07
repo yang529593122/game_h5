@@ -1,52 +1,48 @@
 <template>
 	<view class="content">
 		<view class="tab-list">
-			<view class="tab-item" @click="getTab(1)" :class="{active:active==1}">
-				全部<span v-if="active==1"></span>
-			</view>
-			<view class="tab-item" @click="getTab(2)" :class="{active:active==2}">
-				待审核<span v-if="active==2"></span>
-			</view>
-			<view class="tab-item" @click="getTab(3)" :class="{active:active==3}">
-				已同意<span v-if="active==3"></span>
-			</view>
-			<view class="tab-item" @click="getTab(4)" :class="{active:active==4}">
-				已拒绝<span v-if="active==4"></span>
-			</view>
+      <view class="tab-item"  v-for="(item,index) in navs" @click="navsChange(item,index)" :key="index" :class="index === active ? 'active' :''">
+      	{{ item.title }}<span v-if="index === active"></span>
+      </view>
 		</view>
 		<view style="height: 110rpx;"></view>
 		<view class="list">
-			<view class="item" v-for="item in 10" :key="item">
+			<view class="item" v-for="item in list" :key="item.id">
 				<view class="time-item">
 					<view class="user">
-						<image src="/static/newPage/1.png" mode="aspectFill"></image>
+						<image :src="item.head_img" mode="aspectFill"></image>
 						<view class="user-info">
-							<view class="user-name">名称</view>
-							<view class="user-time">时间</view>
+							<view class="user-name">{{ item.user_nickname }}</view>
+							<view class="user-time">{{ item.create_time }}</view>
 						</view>
 					</view>
-					<view style="status">待审核</view>
+          <!-- 0=待审核；1=已同意；2=已拒绝 -->
+					<view style="status" v-if="item.status === 0">待审核</view>
+          <view style="status" v-if="item.status === 1">已同意</view>
+          <view style="status" v-if="item.status === 2">已拒绝</view>
 				</view>
-				<view class="resele">
+				<view class="resele" >
 					<view class="resele-title">
-						你在王者累计氪的钱，换到现实能买什么？
+						{{ item.content }}
 					</view>
-					<view class="resele-img">
-						<image src="/static/newPage/17.png" mode="aspectFill"></image>
+					<view class="resele-img" v-if="item.status===0">
+						<image :src="item" v-for="item in item.imgsArr" mode="aspectFill"></image>
 					</view>
-					<view class="contact-us">
+
+					<view class="contact-us" v-if="item.status===1">
 						<view class="contact-title">
 							<text class="vertical-bar"></text>
 							<text>联系方式</text>
 						</view>
-						<view class="contact-item">QQ号码  689897858</view>
-						<view class="contact-item">QQ号码  689897858</view>
-						<view class="contact-item">QQ号码  689897858</view>
+						<view class="contact-item">QQ号码  {{ item.qq }}</view>
+						<view class="contact-item">手机号码  {{ item.phone }}</view>
+						<view class="contact-item">微信号码  {{ item.wechat }}</view>
 					</view>
 				</view>
-				<view class="btns">
-					<button class="apply">同意</button>
-					<button class="look">拒绝</button>
+
+				<view class="btns" v-if="item.status === 0">
+					<button class="apply" @click="refuse(item)">拒绝</button>
+					<button class="look" @click="agree(item)">同意</button>
 				</view>
 			</view>
 		</view>
@@ -57,21 +53,97 @@
 	export default{
 		data(){
 			return{
-				active:1,
+				id:'',
+        active:0,
+        navs:[
+          {
+            id:0,
+            title:'全部',
+            status:'-1',
+          },
+          {
+            id:1,
+            title:'待审核',
+            status:'0',
+          },
+          {
+            id:2,
+            title:'已同意',
+            status:'1',
+          },
+          {
+            id:3,
+            title:'已拒绝',
+            status:'2',
+          },
+        ],
+        list:[],
+         status:"-1"
 			}
 		},
+    onLoad(options) {
+    	this.id = options.id;
+      this.init()
+    },
 		methods:{
-			getTab(index){
-				// 切换tab
-				this.active = index;
-			}
+      async init(){
+         const data = await  this.$api.post(global.apiUrls.friends_my_publish_apply,{
+           id:this.id,
+           type:this.status
+         })
+         const result = data.data
+         if (result.code == 1) {
+           result.data.data.forEach(item =>  {
+             let arr = item.images.split(",")
+             item.imgsArr = arr
+           })
+           console.log(result.data)
+           this.list = result.data.data
+         } else {
+           this.$message.info(result.msg);
+         }
+      },
+      // 同意
+      async agree(item){
+        const data = await  this.$api.post(global.apiUrls.friends_agree_apply,{
+          id:item.id,
+        })
+        const result = data.data
+        if (result.code == 1) {
+          this.init()
+          this.$message.info(result.msg);
+
+        }else{
+          this.$message.info(result.msg);
+        }
+      },
+      // 拒绝
+      async refuse(item){
+        const data = await  this.$api.post(global.apiUrls.friends_refuse_apply,{
+          id:item.id,
+        })
+        const result = data.data
+        if (result.code == 1) {
+          this.init()
+          this.$message.info(result.msg);
+        } else {
+          this.$message.info(result.msg);
+        }
+      },
+      navsChange(item,index){
+      	// 切换tab
+      	this.active = index;
+        this.status = item.status
+        this.init()
+      }
+
 		}
 	}
 </script>
 
 <style lang="scss">
 	.content {
-		
+
 		.tab-list {
 			display: flex;
 			justify-content: space-around;
@@ -111,7 +183,7 @@
 				font-weight: 700;
 			}
 		}
-		
+
 		.list {
 			padding: 24rpx;
 			.item {
@@ -156,7 +228,6 @@
 					// justify-content: space-between;
 					// align-items: flex-start;
 					padding-bottom: 24rpx;
-					border-bottom: 1rpx solid #DDDDDD;
 					image{
 						width: 200rpx;
 						height: 148rpx;
@@ -166,7 +237,7 @@
 						color: #36373D;
 						font-weight: 500;
 					}
-					
+
 					.resele-img {
 						margin-top: 24rpx;
 						image {
@@ -206,6 +277,7 @@
 					display: flex;
 					justify-content: flex-end;
 					align-items: center;
+          border-top: 0.5px solid #DDDDDD;
 					.apply {
 						width: 160rpx;
 						line-height: 60rpx;

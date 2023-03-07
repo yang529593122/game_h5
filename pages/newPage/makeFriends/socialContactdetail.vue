@@ -31,6 +31,42 @@
         </view>
       </view>
 
+
+      <block v-if="from === 'myjy'">
+        <view class="line"></view>
+        <view class="make-friends-apply">
+          <view class="make-friends-tips">交友申请</view>
+          <view class="apply-user">
+            <view class="apply-user-info">
+              <image :src="details.apply_head_img" mode="aspectFill"></image>
+              <view class="user-info">
+                <view class="user-name">{{ details.apply_nickname }}</view>
+                <view class="release-time">{{ details.apply_time }}</view>
+              </view>
+            </view>
+            <view class="apply-status" v-if="details.status===0">待对方确认</view>
+            <view class="apply-status" v-if="details.status===1">对方已同意</view>
+            <view class="apply-status" v-if="details.status===2">对方已拒绝</view>
+          </view>
+          <view class="apply-content">
+            {{ details.content }}
+          </view>
+          <view class="apply-img">
+            <image v-for="(item,index) in details.pictures" :key="index" :src="item" mode="aspectFill"></image>
+          </view>
+          <view class="contact-us">
+            <view class="contact-tips">
+              <text class="vertical-bar"></text>
+              <text>联系方式</text>
+            </view>
+            <view class="apply-item">QQ号码 {{ details.qq }}</view>
+            <view class="apply-item">手机号码 {{ details.phone }}</view>
+            <view class="apply-item">微信号码 {{ details.wechat }}</view>
+          </view>
+        </view>
+      </block>
+
+
       <view class="line"></view>
       <view class="commont" v-if="details.total_comment">
         <view class="commont-num">评论 ({{ details.total_comment }})</view>
@@ -46,9 +82,12 @@
         </view>
       </view>
       <view style="height: 120rpx;"></view>
-      <view class="btns">
+      <view class="btns" v-if="from !== 'myjy'" @click="handleJump">
         <image src="/static/newPage/14.png" mode="aspectFill"></image>
-        <text @click="handleJump" data-url="/pages/newPage/makeFriends/submitfiiends">交朋友</text>
+        <text >交朋友</text>
+      </view>
+      <view class="btns" v-if="from === 'myjy' && details.status === 1" @click="handleEvaluation">
+        <text >去评价</text>
       </view>
 
     </block>
@@ -61,13 +100,44 @@
       return {
         id: '',
         details: null,
+        from:"",
       }
     },
     onLoad(options) {
       this.id = options.id;
-      this.init()
+      this.from = options.from
+      console.log(options)
+      if(options.from === 'myjy'){
+        // 从个人中心进入详情
+        this.fromInit()
+      }else{
+        this.init()
+      }
     },
     methods: {
+      // 交朋友
+      handleJump(){
+        this.$urouter.navigateTo(`/pages/newPage/makeFriends/submitfriendspage?id=${this.id}`);
+      },
+      // from 个人中心 我的交友 的 详情 api
+      async fromInit(){
+
+        const options = {
+          id: this.id
+        }
+        const data = await this.$api.post(global.apiUrls.friends_my_apply_detail, options)
+        const result = data.data
+        if (result.code == 1) {
+          this.details = result.data
+        } else {
+          this.$message.info(result.msg);
+        }
+      },
+      // 评价
+      handleEvaluation(){
+        console.log(111)
+        this.$urouter.navigateTo(`/pages/newPage/makeFriends/evaluation?id=${this.id}`);
+      },
       // 初始化数据
       async init() {
         const options = {
@@ -76,7 +146,6 @@
         const data = await this.$api.post(global.apiUrls.friends_friends_detail, options)
         const result = data.data
         if (result.code == 1) {
-          console.log(result.data)
           this.details = result.data
         } else {
           this.$message.info(result.msg);
