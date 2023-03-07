@@ -48,7 +48,11 @@
          }
       },
       handleJump(item){
-        this.$urouter.navigateTo(`/pages/newPage/makeFriends/socialContactdetail?id=${item.id}&from=myjy`);
+        if(item.status=== 2){
+          this.$urouter.navigateTo(`/pages/newPage/makeFriends/socialContactdetail?id=${item.fid}`);
+        }else{
+          this.$urouter.navigateTo(`/pages/newPage/makeFriends/socialContactdetail?id=${item.id}&from=myjy`);
+        }
       },
       handleComment(item){
         this.$urouter.navigateTo(`/pages/newPage/makeFriends/socialContactdetail?id=${item.id}&from=myjy`);

@@ -342,7 +342,7 @@
 	}
 	.content{
     .activedColorText{
-      color: red;
+      color: #295B7B;
     }
 		.release-info-up {
 			padding: 0 32rpx;
