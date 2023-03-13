@@ -200,6 +200,13 @@
         this.initType()
 
     },
+    onShow() {
+     let str =  uni.getStorageSync('itemGame')
+     if(str){
+       this.formDatas.spec = str
+     }
+
+    },
     methods: {
       // 上传图片
       uploadCover() {
@@ -351,6 +358,7 @@
         this.$api.get(global.apiUrls.shop_get_category_list).then(res => {
           if (res.data.code === '1') {
            this.AllAddress=res.data.data
+           this.formDatas.cid =  this.AllAddress[this.value[0]].child[this.value[1]].child[this.value[2]].id
            this.updateSourceDate() // 更新源数据
            this.updateAddressDate() // 更新结果数据
            // this.$forceUpdate() // 触发双向绑定
@@ -453,8 +461,8 @@
           body: this.formDatas.body, // 商品详情
           is_sale: this.isSale ? 1 : 0, // 是否上架：0.下架；1.上架
           is_spec: this.isSspec ? 1 : 0, // 是否开启规格:0.否；1.是
-          spec_name: "", // 规格名称
-          spec: "", // 规格
+          spec_name: this.formDatas.spec_name, // 规格名称
+          spec: this.formDatas.spec, // 规格
           market_price: this.formDatas.market_price, // 划线价
           shop_price: this.formDatas.shop_price, // 	本店价
           cost_price: this.formDatas.cost_price, // 	成本价
@@ -464,6 +472,7 @@
         }
         this.$api.post(global.apiUrls.shop_publish_goods,obj).then(res => {
           if (res.data.code === '1') {
+            uni.removeStorageSync('itemGame')
            uni.navigateTo({
              url:'/pages/tab/my/business/commodity'
            })

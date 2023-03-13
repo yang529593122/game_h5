@@ -73,7 +73,8 @@
       },
       // 确认发布
       submitFn(){
-        console.log(this.itemGame)
+        uni.setStorageSync('itemGame',JSON.stringify(this.itemGame))
+        uni.navigateBack(-1)
       },
 
     }
