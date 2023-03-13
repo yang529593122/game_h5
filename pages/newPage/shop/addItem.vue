@@ -69,13 +69,6 @@
         <image class="add-icon" src="/static/add-img.png" mode="aspectFill" @click="uploadDetailsImg"></image>
       </view>
     </view>
-   <!-- <view class="info-item">
-      <text>公司所在地</text>
-      <view class="info-item-text">
-
-    		<image src="/static/newPage/18.png" mode="aspectFill"></image>
-      </view>
-    </view> -->
     <view class="item-input">
       <text class="input-tips">商品分类</text>
       <view class="select-input">
@@ -94,12 +87,8 @@
       <switch color="#659BC7" class="switch" :checked="isSspec" @change="isSspecFn" />
     </view>
     <view class="item-input" v-if='isSspec'>
-      <text class="input-tips">规格选择</text>
-      <view class="select-input" @click="getToPath('/pages/newPage/shop/addSku')">
-        <text>该商品分类暂无规格 </text>
-        <text class="go-add">去添加</text>
-        <image class="right-icon" src="/static/newPage/66.png" mode=""></image>
-      </view>
+      <text class="input-tips">规格名称</text>
+     <input class="input-item" type="text" v-model="formDatas.spec_name" placeholder="请输入规格名称">
     </view>
     <view class="item-input" v-if='isSspec' @click="getToPath('/pages/newPage/shop/skuDetail')">
       <text class="input-tips">规格详情</text>
@@ -128,13 +117,11 @@
       <text class="input-tips">是否自动发货</text>
       <label class="radio">
         <radio-group @change="radioChange">
-        				<label v-for="(item, index) in [{ value:1,name:'自动发货' },{ value:0,name:'非自动发货' }]" :key="item.value">
+        				<label v-for="(item, index) in [{ value:'1',name:'自动发货' },{ value:'0',name:'非自动发货' }]" :key="index">
         						<radio class="radio-item" :value="item.value" :checked="index === current" />
         					<text>{{item.name}}</text>
         				</label>
         			</radio-group>
-        <!-- <radio class="radio-item" color="#659BC7" value="radio" /><text>自动发货</text>
-        <radio class="radio-item" color="#659BC7" value="radio" /><text>非自动发货</text> -->
       </label>
     </view>
     <view class="sku-list">
@@ -149,7 +136,7 @@
             <input type="text" placeholder="请输入密码" v-model='item.password'>
           </view>
         </view>
-        <image class="delete-icon" src="/static/newPage/67.png" mode="aspectFill"></image>
+        <image class="delete-icon" src="/static/newPage/67.png" mode="aspectFill" @click="delZh(item,index)"></image>
       </view>
       <view class="add-sku" @click="addSku">+添加一组</view>
     </view>
@@ -197,7 +184,7 @@
           shop_price: "", // 	本店价
           cost_price: "", // 	成本价
           stock: "", // 库存数量
-          is_auto_shipping: 1, // 是否自动发货：0.否；1.是
+          is_auto_shipping: "1", // 是否自动发货：0.否；1.是
           cardinfo: "", // 卡号密码json字符串（id=编辑时传，card_no=卡号，password=密码）
         },
         itemGame:[
@@ -366,7 +353,7 @@
            this.AllAddress=res.data.data
            this.updateSourceDate() // 更新源数据
            this.updateAddressDate() // 更新结果数据
-           this.$forceUpdate() // 触发双向绑定
+           // this.$forceUpdate() // 触发双向绑定
           } else {
             this.$message.info(res.data.msg);
           }
@@ -382,7 +369,6 @@
         this.array = []
 
         this.array[0] = this.AllAddress.map(obj => {
-          console.log(obj)
           return {
             name: obj.name
           }
@@ -436,7 +422,7 @@
         this.isSale = e.detail.value
       },
       // 是否开启规格
-      isSspecFn(){
+      isSspecFn(e){
         this.isSspec = e.detail.value
       },
       // 是否自动发货
@@ -486,6 +472,9 @@
           }
         })
 
+      },
+      delZh(item,index){
+        this.itemGame.splice(index,1)
       },
       getToPath(url) {
         uni.navigateTo({
