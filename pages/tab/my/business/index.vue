@@ -2,8 +2,8 @@
 	<view class="content">
 		<!-- 标题 -->
 		<view class="header">
-			<image class="back" src="/static/newPage/25.png" mode="aspectFill"></image>
-			<image class="kefu" src="/static/newPage/24.png" mode="aspectFill"></image>
+			<image class="back" src="/static/newPage/25.png" mode="aspectFill" @click="goback"></image>
+			<image class="kefu" src="/static/newPage/24.png" mode="aspectFill" @click="returnPage"></image>
 			<image class="background" src="/static/newPage/23.png" mode=""></image>
 		</view>
 		<view class="shop-info">
@@ -63,7 +63,7 @@
 						<view class="num">220</view>
 						<view class="status">待售后</view>
 					</view>
-					<view class="order-num-item">
+					<view class="order-num-item" @click="goToPage('/pages/tab/my/business/replenishment')">
 						<view class="num">220</view>
 						<view class="status">补货提醒</view>
 					</view>
@@ -74,34 +74,75 @@
 				</view>
 				<!-- 商品管理 -->
 				<view class="shop-tips-list">
-					<view class="shop-tips-item" @click="handleJump"
-					data-url="/pages/newPage/shop/commodityManagement">
+					<view class="shop-tips-item"  @click="goToPage('/pages/tab/my/business/commodity')">
 						<image class="shop-tips-item-img" src="/static/newPage/29.png" mode=""></image>
 						<view class="shop-tips-item-text">商品管理</view>
 					</view>
-					<view class="shop-tips-item">
+					<view class="shop-tips-item" @click="goToPage('/pages/tab/my/business/order')">
 						<image class="shop-tips-item-img" src="/static/newPage/30.png" mode=""></image>
 						<view class="shop-tips-item-text">订单管理</view>
 					</view>
-					<view class="shop-tips-item">
+					<view class="shop-tips-item" @click="goToPage('/pages/tab/my/business/finance')">
 						<image class="shop-tips-item-img" src="/static/newPage/31.png" mode=""></image>
 						<view class="shop-tips-item-text">财务状况</view>
 					</view>
-					<view class="shop-tips-item">
-						<image class="shop-tips-item-img" src="/static/newPage/32.png" mode=""></image>
+					<view class="shop-tips-item" @click="goToPage('/pages/tab/my/business/top')">
+						<image class="shop-tips-item-img" src="/static/newPage/32.png" mode="aspectFill"></image>
 						<view class="shop-tips-item-text">推广置顶</view>
 					</view>
-					<view class="shop-tips-item">
-						<image class="shop-tips-item-img" src="/static/newPage/33.png" mode=""></image>
+					<view class="shop-tips-item" @click="goToPage('/pages/tab/my/business/comment')">
+						<image class="shop-tips-item-img" src="/static/newPage/33.png" mode="aspectFill"></image>
 						<view class="shop-tips-item-text">店铺评价</view>
 					</view>
 				</view>
-			</view>
+        <!-- 图表 -->
+        <view>
+            <qiun-data-charts type="line" :chartData="chartData" />
+          </view>
+      </view>
 		</view>
 	</view>
 </template>
 
 <script>
+  export default {
+    data(){
+      return {
+        chartData: {},
+      }
+    },
+    onReady() {
+      setTimeout(() => {
+              let res = {
+                  categories: ["1月","2月","3月","4月","5月","6月"],
+                  series: [
+                    {
+                      name: "销售额",
+                      data: [35,36,31,33,13,34]
+                    },
+                    {
+                      name: "订单数",
+                      data: [15,26,18,23,24,3]
+                    },
+                  ]
+                };
+              this.chartData = JSON.parse(JSON.stringify(res));
+            }, 500);
+    },
+    methods:{
+      goToPage(url){
+        uni.navigateTo({url:url})
+      },
+      returnPage(){
+        uni.navigateTo({
+        	url:'/pages/newPage/newsPages'
+        })
+      },
+      goback(){
+        uni.navigateBack({ delta: 1 });
+      }
+    }
+  }
 </script>
 
 <style lang="scss">
@@ -136,21 +177,21 @@
 				left: 0;
 			}
 		}
-		
+
 		.shop-info {
-			
-			
+
+
 			.background{
 				width: 100%;
 				height: 480rpx;
 			}
-			
+
 			.shop-user-info {
 				width: 686rpx;
 				margin: 0 auto;
 				position: relative;
 				top: -360rpx;
-				
+
 				.shop-user-infos {
 					display: flex;
 					justify-content: flex-start;
@@ -164,17 +205,17 @@
 						color: #fff;
 						width: 542rpx;
 						margin-left: 24rpx;
-						
+
 						.shop-info-name {
 							display: flex;
 							justify-content: space-between;
 							align-items: flex-end;
-							
+
 							.name {
 								font-size: 36rpx;
 								font-weight: bold;
 							}
-							
+
 							.pay-num {
 								width: 250rpx;
 								display: flex;
@@ -186,7 +227,7 @@
 								text:nth-child(){}
 							}
 						}
-						
+
 						.shop-infos {
 							display: flex;
 							justify-content: space-between;
@@ -206,7 +247,7 @@
 									margin-right: 5rpx;
 								}
 								image:last-child{
-									margin-right: 0; 
+									margin-right: 0;
 								}
 							}
 							view{
@@ -215,25 +256,25 @@
 						}
 					}
 				}
-				
+
 				.data-status {
 					background: #fff;
 					border-radius: 4rpx;
 					padding: 29rpx 24rpx;
 					margin-top: 36rpx;
-					
+
 					.data-tips {
 						display: flex;
 						justify-content: space-between;
 						align-items: center;
 						margin-bottom: 53rpx;
-						
+
 						.data-tips-text {
 							font-size: 32rpx;
 							color: #333333;
 							font-weight: bold;
 						}
-						
+
 						.select-time {
 							display: flex;
 							justify-content: space-around;
@@ -253,12 +294,12 @@
 							}
 						}
 					}
-					
+
 					.data-list {
 						display: flex;
 						justify-content: space-around;
 						align-items: center;
-						
+
 						.data-item {
 							text-align: center;
 							view:nth-child(1){
@@ -274,7 +315,7 @@
 						}
 					}
 				}
-				// 
+				//
 				.order-num-list {
 					display: flex;
 					justify-content: space-between;
@@ -283,7 +324,7 @@
 					background: #fff;
 					border-radius: 4rpx;
 					margin: 24rpx 0;
-					
+
 					.order-num-item {
 						text-align: center;
 						.num {
@@ -298,22 +339,22 @@
 						}
 					}
 				}
-				// 
+				//
 				.shop-tips-list {
 					padding: 32rpx 30rpx;
 					background: #fff;
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-					
+
 					.shop-tips-item {
 						text-align: center;
-						
+
 						.shop-tips-item-img {
 							width: 56rpx;
 							height: 56rpx;
 						}
-						
+
 						.shop-tips-item-text {
 							font-size: 24rpx;
 						}

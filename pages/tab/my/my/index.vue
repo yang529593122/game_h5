@@ -100,13 +100,21 @@
 					<view class="text-center text-sm" style="color: #36373D;margin-top: 16rpx;">我的交U</view>
 				</view>
 
-				<view class="flex flex-direction justify-center align-center" @click="handleJump"
+				<view v-if="userInfo.user_type !== 1" class="flex flex-direction justify-center align-center" @click="handleJump"
 					data-url="/pages/tab/tradingMall/residencyAgreement">
 					<view style="width: 48rpx;height: 48rpx;">
 						<image src="/static/newPage/63.png" style="width: 48rpx;height: 48rpx;" mode=""></image>
 					</view>
 					<view class="text-center text-sm" style="color: #36373D;margin-top: 16rpx;">商家入驻</view>
 				</view>
+
+        <view v-else class="flex flex-direction justify-center align-center" @click="handleJump"
+        	data-url="/pages/tab/my/business/index">
+        	<view style="width: 48rpx;height: 48rpx;">
+        		<image src="/static/newPage/63.png" style="width: 48rpx;height: 48rpx;" mode=""></image>
+        	</view>
+        	<view class="text-center text-sm" style="color: #36373D;margin-top: 16rpx;">我是商家</view>
+        </view>
 
 				<view class="flex flex-direction justify-center align-center" @click="handleJump"
 					data-url="/pages/newPage/makeFriends/applicationDetails">
@@ -326,7 +334,7 @@ background: #36373D;margin-right: 16rpx;"></view>
     				<view class="txt">议价账号申请</view>
     				<view class="jiaobiao" v-if="ordernum.no_pay != 0">{{ ordernum.no_pay }}</view>
     			</view>
-          
+
     			<view class="item flex-sub text-center" @click="handleJump"
     				data-url="/pages/bargaining/participateIn/participateIn">
     				<image src="../../../../static/my/6.png" mode="aspectFit"></image>
@@ -342,8 +350,8 @@ background: #36373D;margin-right: 16rpx;"></view>
     		</view>
     	</view>
     <!-- 议价功能  end -->
-    
-    
+
+
 
 		<!-- 列表导航 start -->
 		<view class="margin-top margin-lr bg-white" style="border-radius: 2rpx;">

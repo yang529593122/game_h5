@@ -1,9 +1,18 @@
 <template>
 	<view class="content">
+    <view class="" v-if="!details">
+
+    </view>
+    <block v-else>
+
 		<view class="examine-status">
 			<view class="status-one">
-				<view class="examine-text">审核通过</view>
-				<view class="btns">查看店铺</view>
+        <!-- ：-1=未申请；0=待审核；1.已通过；2.已拒绝 -->
+				<view class="examine-text" v-if="details.status === 0">待审核</view>
+        <view class="examine-text" v-if="details.status === 1">已通过</view>
+        <view class="examine-text" v-if="details.status === 2">已拒绝</view>
+				<view class="btns" v-if="details.status === 1" @click="goShopDetails">查看店铺</view>
+        <view class="btns" v-if="details.status === 2" @click="subnew">重新提交</view>
 			</view>
 		</view>
 		<view class="user-info">
@@ -11,22 +20,22 @@
 			<view class="item-list">
 				<view class="user-item">
 					<view class="item-tips">联系人姓名</view>
-					<view class="item-text">张三</view>
+					<view class="item-text">{{ details.name }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">联系人手机</view>
-					<view class="item-text">15603908653</view>
+					<view class="item-text">{{ details.mobile }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">联系人身份证</view>
-					<view class="item-text">410781100000000</view>
+					<view class="item-text">{{ details.idcard_no }}</view>
 				</view>
 				<view class="card-img">
-					<image src="/static/add-img.png" mode="aspectFill"></image>
+					<image :src="details.idcard_front" mode="aspectFill"></image>
 					<view class="img-text">身份证正面</view>
 				</view>
 				<view class="card-img">
-					<image src="/static/add-img.png" mode="aspectFill"></image>
+					<image :src="details.idcard_reverse" mode="aspectFill"></image>
 					<view class="img-text">身份证反面</view>
 				</view>
 			</view>
@@ -34,47 +43,82 @@
 			<view class="item-list">
 				<view class="user-item">
 					<view class="item-tips">结算账户</view>
-					<view class="item-text">张三</view>
+					<view class="item-text">{{ details.bank_account }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">结算开户行</view>
-					<view class="item-text">15603908653</view>
+					<view class="item-text">{{ details.opening }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">姓名</view>
-					<view class="item-text">410781100000000</view>
+					<view class="item-text">{{ details.true_name }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">结算开户银行支行名称</view>
-					<view class="item-text">410781100000000</view>
+					<view class="item-text">{{ details.subbranch }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">结算开户银行所在地</view>
-					<view class="item-text">410781100000000</view>
+					<view class="item-text">{{ details.bank_address }}</view>
 				</view>
 			</view>
 			<view class="user-tips">店铺信息</view>
 			<view class="item-list">
 				<view class="user-item">
 					<view class="item-tips">店铺名称</view>
-					<view class="item-text">410781100000000</view>
+					<view class="item-text">{{  details.shop_name }}</view>
 				</view>
 				<view class="user-item">
 					<view class="item-tips">店铺logo</view>
-					<image src="/static/add-img.png" mode=""></image>
+					<image :src="details.shop_logo" mode="aspectFill"></image>
 				</view>
 			</view>
-			
+
 		</view>
-	</view>
+    </block>
+  </view>
 </template>
 
 <script>
+  export default {
+    data(){
+      return {
+        details:null,
+      }
+    },
+    onLoad() {
+      this.init()
+    },
+    methods:{
+      async init(){
+        const data = await this.$api.post(global.apiUrls.shop_apply_status)
+         const result = data.data
+         if (result.code == 1) {
+           console.log(result.data)
+           this.details = result.data
+         } else {
+           this.$message.info(result.msg);
+         }
+      },
+      goShopDetails(){
+        uni.navigateTo({
+        	url:'/pages/tab/my/business/index'
+        })
+      },
+      subnew(){
+        uni.navigateTo({
+        	url:'/pages/tab/tradingMall/authenticationInfo?id='+this.details.id
+        })
+
+      },
+
+    }
+  }
 </script>
 
 <style lang="scss">
 	.content{
-		
+
 		.examine-status {
 			background: #fff;
 			padding: 32rpx 0;
@@ -103,7 +147,7 @@
 			}
 		}
 		.user-info {
-			
+
 			.user-tips {
 				padding: 20rpx 32rpx;
 			}

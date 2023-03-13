@@ -23,10 +23,15 @@
 				</view>
 			</view>
 			<!-- <view @click="toPath('/pages/tab/tradingMall/residencyAgreement')" class="settle-in" style="height: 64rpx;margin-right: 32rpx;"> -->
-			<view @click="toPath('/pages/tab/my/business/index')" class="settle-in" style="height: 64rpx;margin-right: 32rpx;">
-				<image src="/static/newPage/15.png" mode=""></image>
-				<view>商家入驻</view>
-			</view>
+
+      <view v-if="userInfo && userInfo.user_type ===1" @click="toPath('/pages/tab/my/business/index')" class="settle-in" style="height: 64rpx;margin-right: 32rpx;">
+      	<image src="/static/newPage/15.png" mode=""></image>
+      	<view>我的店铺</view>
+      </view>
+      <view v-else @click="toPath('/pages/tab/tradingMall/residencyAgreement')" class="settle-in" style="height: 64rpx;margin-right: 32rpx;">
+      	<image src="/static/newPage/15.png" mode=""></image>
+      	<view>商家入驻</view>
+      </view>
 		</view>
 		<!-- 轮播图 -->
 		<view class="swiper-wrap">
@@ -109,9 +114,14 @@
 	export default {
 		data() {
 			return {
+        userInfo:null,
 				searchText: '搜索你想要的商品'
 			}
 		},
+    onLoad() {
+      const value = uni.getStorageSync('USER_INFO');
+      this.userInfo = value
+    },
 		methods: {
 			toPath(url){
 				uni.navigateTo({

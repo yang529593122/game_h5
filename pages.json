@@ -38,6 +38,98 @@
 			"navigationStyle": "custom"
 		}
 	},
+  {
+  	"path": "pages/tab/my/business/replenishment",
+  	"style": {
+      "navigationBarTitleText": "补货通知"
+  	}
+  },
+  {
+  	"path": "pages/tab/my/business/top",
+  	"style": {
+      "navigationBarTitleText": "置顶位订单"
+  	}
+  },
+  {
+  	"path": "pages/tab/my/business/details",
+  	"style": {
+      "navigationBarTitleText": "详情"
+  	}
+  },
+  
+  {
+  	"path": "pages/tab/my/business/withdraw_cash",
+  	"style": {
+      "navigationBarTitleText": "提现",
+      "app-plus": {
+      	"titleNView": {
+      		"buttons": [
+      			{
+      				"text": "绑定账号",
+      				"color": "#659BC7",
+      				"fontSize": "30rpx",
+      				"width":"150rpx"
+      			}
+      		]
+      	}
+      }
+  	}
+  },
+
+  {
+  	"path": "pages/tab/my/business/comment",
+  	"style": {
+      "navigationBarTitleText": "全部评论"
+  	}
+  },
+  {
+  	"path": "pages/tab/my/business/order",
+  	"style": {
+      "navigationBarTitleText": "订单管理"
+  	}
+  },
+  {
+  	"path": "pages/tab/my/business/toppay",
+  	"style": {
+      "navigationBarTitleText": "购买置顶位"
+  	}
+  },
+  {
+  	"path": "pages/tab/my/business/commodity",
+  	"style": {
+      "navigationBarTitleText": "商品管理",
+      "app-plus": {
+      	"titleNView": {
+      		"buttons": [
+      			{
+      				"text": "添加商品",
+      				"color": "#659BC7",
+      				"fontSize": "30rpx",
+      				"width":"150rpx"
+      			}
+      		]
+      	}
+      }
+  	}
+  },
+  {
+  	"path": "pages/tab/my/business/finance",
+  	"style": {
+      "navigationBarTitleText": "财务状况",
+      "app-plus": {
+      	"titleNView": {
+      		"buttons": [
+      			{
+      				"text": "提现记录",
+      				"color": "#659BC7",
+      				"fontSize": "30rpx",
+      				"width":"150rpx"
+      			}
+      		]
+      	}
+      }
+  	}
+  },
 	{
 		"path": "pages/tab/tradingMall/index",
 		"style": {

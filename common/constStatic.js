@@ -110,3 +110,101 @@ export const BARGAINING_RECEIVE_NAV_DATAS = [
       status: 4,
     },
 ]
+
+// -1全部；0.待审核；1.审核失败；2.出售中；3.已下架
+export const COMMODITY_NAV_DATAS = [
+  {
+      id: 0,
+      title: '全部',
+      status: '-1',
+    },
+    {
+      id: 1,
+      title: '待审核',
+      status: '0',
+    },
+    {
+      id: 2,
+      title: '审核失败',
+      status: '1',
+    },
+    {
+      id: 3,
+      title: '出售中',
+      status: '2',
+    },
+    {
+      id: 3,
+      title: '已下架',
+      status: '3',
+    },
+]
+
+
+export const BUSINESS_ORDER_NAV_DATAS = [
+  {
+      id: 0,
+      title: '全部',
+      status: '-1',
+    },
+    {
+      id: 1,
+      title: '待发货',
+      status: '0',
+    },
+    {
+      id: 2,
+      title: '待收货',
+      status: '1',
+    },
+    {
+      id: 3,
+      title: '交易成功',
+      status: '2',
+    },
+]
+
+export const PROVINCE_DATAS = [
+  '北京',
+  '天津',
+  '河北',
+  '山西',
+  '内蒙',
+  '辽宁',
+  '吉林',
+  '黑龙江',
+  '上海',
+  '江苏',
+  '浙江',
+  '安徽',
+  '福建',
+  '江西',
+  '山东',
+  '河南',
+  '湖北',
+  '湖南',
+  '广东',
+  '广西',
+  '海南',
+  '重庆',
+  '四川',
+  '贵州',
+  '云南',
+  '西藏',
+  '陕西',
+  '甘肃',
+  '青海',
+  '宁夏',
+  '新疆',
+  '台湾',
+  '香港',
+  '澳门',
+]
+
+export const CITY_DATAS = [
+  [ '北京市' ],
+]
+
+export const COUNTY__DATAS = [
+  ['东城区', '西城区', '崇文区','宣武区','朝阳区','丰台区','石景山区','海淀区','门头沟区','房山区','通州区','顺义区','昌平区','大兴区','怀柔区','平谷区','密云县','延庆县','其他区']
+]
