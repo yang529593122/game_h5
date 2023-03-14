@@ -92,7 +92,7 @@
           <image src="./static/qbfl.png" mode=""></image>
           <text>商品分类</text>
         </view>
-        <view class="bottom-nav-content-item">
+        <view class="bottom-nav-content-item" @click="gotoKefushangpin">
           <image src="./static/lxwm.png" mode=""></image>
           <text>联系客服</text>
         </view>
@@ -103,10 +103,12 @@
 </template>
 
 <script>
+  import { CUSTOMER53URL } from "@/common/config.js"
   export default {
     data() {
       return {
         id:'',
+        cid:'',
         curr: 0,
         list:[],
         layout:false
@@ -114,9 +116,13 @@
     },
     onLoad(opt) {
       this.id= opt.id
+      this.cid = opt.cid || ""
       this.initList()
     },
     methods:{
+      gotoKefushangpin() {
+        window.location.href = CUSTOMER53URL;
+      },
       changeLayout(){
         this.layout = !this.layout
       },
@@ -135,6 +141,7 @@
         //  排序方式：0.置顶位（交易商城首页列表）；1.默认（时间倒序）；2.销量倒序；3.销量升序；4.好评率倒序；5.好评率升序；6.价格倒序；7.价格升序
         this.$api.post(global.apiUrls.shop_goods_list,{
           shop_id:this.id,
+          cid:this.cid,
           order:1
         }).then(res => {
           if (res.data.code === '1') {

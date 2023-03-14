@@ -13,7 +13,7 @@
 				<view class="names">
 					{{ details.name }}
 				</view>
-				<view class="Collection" v-if="details.collect_goods === 0">
+				<view class="Collection" v-if="details.collect_goods === 0" @click="dyFn">
 					<image src="/static/newPage/54.png" mode="aspectFill"></image>
 					<view>收藏</view>
 				</view>
@@ -83,13 +83,13 @@
 			</view>
 		</view>
 		<!-- 店铺详情 -->
-		<view class="shop-info">
+		<view class="shop-info" v-if="shopDetails">
 			<view class="shop-name">
-				<image class="shop-logo" src="/static/newPage/1.png" mode="aspectFill"></image>
-				<text class="shop-names">露露</text>
+				<image class="shop-logo" :src="shopDetails.shop_logo" mode="aspectFill"></image>
+				<text class="shop-names">{{ shopDetails.shop_name }}</text>
 				<image class="shop-type" src="/static/newPage/38.png" mode="aspectFill"></image>
 			</view>
-			<view class="go-shop">
+			<view class="go-shop" @click="toPath(`/pages/newPage/shop/shop?id=${shopDetails.id}`)">
 				<text>进入店铺</text>
 				<image src="/static/newPage/55.png" mode="aspectFill"></image>
 			</view>
@@ -152,6 +152,7 @@
 			return{
 				show:true,
         details:null,
+        shopDetails:null,
         id:'',
 			}
 		},
@@ -160,6 +161,18 @@
       this.initData()
     },
 		methods:{
+      dyFn(){
+        this.$api.post(global.apiUrls.shop_add_collection,{
+          type:1,
+          collect_id:this.id
+        }).then(res => {
+          if (res.data.code === '1') {
+           this.$message.info(res.data.msg);
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
 
       initData(){
         this.$api.post(global.apiUrls.shop_goods_detail,{
@@ -168,6 +181,18 @@
           if (res.data.code === '1') {
             console.log(res.data.data)
             this.details = res.data.data
+            this.initShop(res.data.data.shop_id)
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
+      initShop(id){
+        this.$api.post(global.apiUrls.shop_get_shop_info,{
+          shop_id:id
+        }).then(res => {
+          if (res.data.code === '1') {
+           this.shopDetails = res.data.data
           } else {
             this.$message.info(res.data.msg);
           }

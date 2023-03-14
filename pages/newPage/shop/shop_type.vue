@@ -74,7 +74,7 @@
             {{ item.name }}
           </view>
           <view class="right-title-box">
-            <view class="right-title-box-item" v-for="(it,ind) in item.child">
+            <view class="right-title-box-item" v-for="(it,ind) in item.child" @click="selectType(it)">
               <image style="display: block;width: 120rpx;height: 120rpx;" src="./static/iconty.png" mode=""></image>
               <view class="" style="padding-top: 10rpx;">
                 {{ it.name }}
@@ -101,8 +101,8 @@
           <image src="./static/yesspfl.png" mode=""></image>
           <text>商品分类</text>
         </view>
-        <view class="bottom-nav-content-item">
-          <image src="./static/lxwm.png" mode=""></image>
+        <view class="bottom-nav-content-item" @click="gotoKefushangpin">
+          <image src="./static/lxwm.png" mode="" ></image>
           <text>联系客服</text>
         </view>
       </view>
@@ -111,6 +111,7 @@
 </template>
 
 <script>
+  import { CUSTOMER53URL } from "@/common/config.js"
   export default {
     data() {
       return {
@@ -129,7 +130,14 @@
       this.initShop()
       this.initList()
     },
+
     methods:{
+      gotoKefushangpin() {
+        window.location.href = CUSTOMER53URL;
+      },
+      selectType(item){
+        this.goPath(`/pages/newPage/shop/shop_prod?id=${this.id}&cid=${item.id}`)
+      },
       dyFn(){
         this.$api.post(global.apiUrls.shop_add_collection,{
           type:4,

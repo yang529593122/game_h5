@@ -1,7 +1,7 @@
 <template>
   <view class="content">
   <block v-if="shopDetails">
-    <view class="header" style="background: #000;">
+    <view class="header">
       <view class="top">
         <view class="">
           <image style="display: block;width: 40rpx;height: 40rpx;" src="../../../static/newPage/25.png" mode=""></image>
@@ -134,7 +134,7 @@
           <image src="./static/qbfl.png" mode=""></image>
           <text>商品分类</text>
         </view>
-        <view class="bottom-nav-content-item">
+        <view class="bottom-nav-content-item" @click="gotoKefushangpin">
           <image src="./static/lxwm.png" mode=""></image>
           <text>联系客服</text>
         </view>
@@ -162,6 +162,9 @@
       this.initList()
     },
     methods:{
+      gotoKefushangpin() {
+        window.location.href = CUSTOMER53URL;
+      },
       dyFn(){
         this.$api.post(global.apiUrls.shop_add_collection,{
           type:4,
@@ -236,6 +239,8 @@
   }
   .header{
     padding: 40rpx 32rpx;
+    background: url('./static/bg.png') no-repeat;
+    background-size: cover;
     .top{
       display: flex;
       justify-content: space-between;
