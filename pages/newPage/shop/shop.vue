@@ -103,8 +103,8 @@
     </view>
     <view class="shop-box">
       <view class="shop-item" v-for="(item,index) in list" @click="goDetails(item)">
-        <image :src="item.thumb" mode="aspectFill"></image>
-        <view class="" style="padding: 16rpx 0 ;color: #36373D;">
+        <image :src="item.thumb" mode="aspectFill" style="margin-bottom: 10rpx;"></image>
+        <view class="" style="color: #36373D;overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;-webkit-line-clamp: 2;">
           {{ item.name }}
         </view>
         <view class="">
