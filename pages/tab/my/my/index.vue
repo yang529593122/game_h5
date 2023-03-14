@@ -482,9 +482,9 @@ background: #36373D;margin-right: 16rpx;"></view>
 					refund: 0,
 					msg_num: 0
 				};
-				// this.$store.commit('setBadge', 0);
 			}
-			// this.setTabBarItem();
+
+
 		},
 		computed: {
 			// 用户信息
@@ -498,6 +498,8 @@ background: #36373D;margin-right: 16rpx;"></view>
 		},
 		onPageScroll(e) {},
 		methods: {
+
+      
 			gotoDetail(url) {
 				console.log(url)
 				this.$urouter.navigateTo(url);

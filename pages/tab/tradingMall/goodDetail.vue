@@ -1,33 +1,38 @@
 <template>
 	<view class="content">
+    <block v-if="details">
 		<view class="goods-info">
 			<swiper class="swiper" :indicator-dots="false" :autoplay="true" :interval="3000" :duration="1000">
-				<swiper-item>
+				<swiper-item v-for="(item,index) in details.images">
 					<view class="swiper-item">
-						<image src="/static/newPage/17.png" mode="aspectFill"></image>
+						<image :src="item" mode="aspectFill"></image>
 					</view>
 				</swiper-item>
 			</swiper>
 			<view class="goods-name">
 				<view class="names">
-					王者荣耀代练刷排位代打购买全皮肤国标服V10购买全皮肤国标服V10
+					{{ details.name }}
 				</view>
-				<view class="Collection">
+				<view class="Collection" v-if="details.collect_goods === 0">
 					<image src="/static/newPage/54.png" mode="aspectFill"></image>
 					<view>收藏</view>
 				</view>
+        <view class="Collection" v-if="details.collect_goods === 1">
+        	<image src="/static/newPage/54.png" mode="aspectFill"></image>
+        	<view>已收藏</view>
+        </view>
 			</view>
 			<view class="goods-price">
 				<view class="price">
 					<text>￥</text>
-					<text>250</text>
-					<text>￥250</text>
+					<text>{{ details.shop_price }}</text>
+					<text>￥{{ details.market_price }}</text>
 				</view>
-				<view class="goods-num">销量133件</view>
+				<view class="goods-num">销量{{ details.sales_sum }}件</view>
 			</view>
-			<view class="notice">
+			<view class="notice" v-if="details.shop_tips">
 				<image src="/static/newPage/43.png" mode="aspectFill"></image>
-				<view>平台公告：说无法下单要你缴费的是骗子！说加QQ...</view>
+				<view>平台公告：{{ details.shop_tips }}</view>
 			</view>
 		</view>
 		<view class="specifications">
@@ -41,10 +46,10 @@
 			<view class="evaluate-tips">
 				<view class="evaluate-num">
 					<text class="bold"></text>
-					<text class="commont-num">商品评价(1005)</text>
+					<text class="commont-num">商品评价({{ details.comment_total }})</text>
 				</view>
 				<view class="favorable-rate" @click="toPath('/pages/tab/tradingMall/allEvaluate')">
-					<text>好评率98.4%</text>
+					<text>好评率{{ details.praise_rate }}%</text>
 					<image src="/static/newPage/55.png" mode="aspectFill"></image>
 				</view>
 			</view>
@@ -97,28 +102,28 @@
 					<text class="commont-num">商品详情</text>
 				</view>
 			</view>
-			<view class="">
-				<image src="/static/newPage/17.png" mode="aspectFill"></image>
+			<view class="" style="padding-top: 30rpx;">
+				<image :src="item" mode="aspectFill" v-for="(item,index) in details.detail_images" :key="index"></image>
 			</view>
 		</view>
 		<!-- 立即购买 -->
 		<view class="get-pay">
-			<view class="shop">
+			<view class="shop" @click="toPath(`/pages/newPage/shop/shop?id=${details.shop_id}`)">
 				<image src="/static/newPage/56.png" mode="aspectFill"></image>
 				<view>店铺</view>
 			</view>
-			<view class="shop">
+			<view class="shop" @click="gotoKefushangpin">
 				<image src="/static/newPage/57.png" mode="aspectFill"></image>
-				<view>店铺</view>
+				<view>客服</view>
 			</view>
 			<view class="pay">
 				立即购买
 			</view>
 		</view>
-		
-		
+    </block>
+
 		<!-- 规格 -->
-		<fu-popup v-model="show" mode="bottom">
+		<!-- <fu-popup v-model="show" mode="bottom">
 			<view class="spec-content">
 				<view class="shop-infos">
 					<image class="shop-img" src="/static/newPage/17.png" mode="aspectFill"></image>
@@ -135,19 +140,43 @@
 					<image class="close" src="/static/newPage/58.png" mode="aspectFill"></image>
 				</view>
 			</view>
-		</fu-popup>
-		
+		</fu-popup> -->
+
 	</view>
 </template>
 
 <script>
+  	import {CUSTOMER53URL} from '@/common/config.js';
 	export default{
 		data(){
 			return{
-				show:true
+				show:true,
+        details:null,
+        id:'',
 			}
 		},
+    onLoad(options) {
+      this.id = options.id
+      this.initData()
+    },
 		methods:{
+
+      initData(){
+        this.$api.post(global.apiUrls.shop_goods_detail,{
+          goods_id:this.id
+        }).then(res => {
+          if (res.data.code === '1') {
+            console.log(res.data.data)
+            this.details = res.data.data
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
+      gotoKefushangpin() {
+        window.location.href = CUSTOMER53URL;
+      },
+
 			toPath(url){
 				uni.navigateTo({
 					url:url
@@ -159,7 +188,7 @@
 
 <style lang="scss">
 	.content {
-		
+
 		.goods-info {
 			background: #fff;
 			width: 100%;
@@ -168,18 +197,18 @@
 				width: 702rpx;
 				margin: 0 auto;
 				height: 490rpx;
-				
+
 				.swiper-item {
 					width: 702rpx;
 					height: 490rpx;
-					
+
 					image{
 						width: 702rpx;
 						height: 490rpx;
 					}
 				}
 			}
-			
+
 			.goods-name {
 				display: flex;
 				justify-content: space-between;
@@ -189,7 +218,7 @@
 					font-size: 36rpx;
 					color: #19212D;
 				}
-				
+
 				.Collection {
 					width: 80rpx;
 					text-align: center;
@@ -203,7 +232,7 @@
 					}
 				}
 			}
-			
+
 			.goods-price {
 				display: flex;
 				justify-content: space-between;
@@ -211,7 +240,7 @@
 				padding: 24rpx 15rpx;
 				background: rgb(41,90,121);
 				margin-top: 24rpx;
-				
+
 				.price {
 					color: #fff;
 					text:nth-child(1) {
@@ -226,13 +255,13 @@
 						margin-left: 20rpx;
 					}
 				}
-				
+
 				.goods-num {
 					font-size: 24rpx;
 					color: #B4C5D1;
 				}
 			}
-			
+
 			.notice {
 				display: flex;
 				justify-content: flex-start;
@@ -251,7 +280,7 @@
 				}
 			}
 		}
-		
+
 		.specifications {
 			display: flex;
 			justify-content: space-between;
@@ -259,20 +288,20 @@
 			margin: 10rpx 0;
 			background: #fff;
 			padding: 32rpx;
-			
+
 			.specifications-tips {
 				font-size: 28rpx;
 				color: #333;
 			}
 			.select-icon {
-				
+
 				image {
 					width: 20rpx;
 					height: 22rpx;
 				}
 			}
 		}
-		
+
 		.evaluate {
 			padding: 32rpx;
 			background: #fff;
@@ -280,7 +309,7 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				
+
 				.evaluate-num {
 					display: flex;
 					justify-content: flex-start;
@@ -298,7 +327,7 @@
 						color: #333;
 					}
 				}
-				
+
 				.favorable-rate {
 					image {
 						width: 12rpx;
@@ -312,9 +341,9 @@
 					}
 				}
 			}
-			
+
 			.evaluate-list {
-				
+
 				.evaluate-user {
 					display: flex;
 					justify-content: space-between;
@@ -328,14 +357,14 @@
 							width: 56rpx;
 							height: 56rpx;
 						}
-						
+
 						.user-info {
 							margin-left: 10rpx;
 							.user-name {
 								font-size: 28rpx;
 								color: #333;
 							}
-							
+
 							.evaluate-star {
 								image{
 									width: 16rpx;
@@ -345,13 +374,13 @@
 						}
 					}
 				}
-				
+
 				.evaluate-commont {
 					margin-bottom: 24rpx;
 					font-size: 28rpx;
 					line-height: 40rpx;
 				}
-				
+
 				.evaluate-image-list {
 					display: flex;
 					justify-content: flex-start;
@@ -361,12 +390,12 @@
 						height: 226rpx;
 						margin-right: 10rpx;
 					}
-					
+
 					image:last-child{
 						margin-right: 0;
 					}
 				}
-				
+
 				.goods-vip {
 					margin-top: 32rpx;
 					font-size: 24rpx;
@@ -374,7 +403,7 @@
 				}
 			}
 		}
-		
+
 		.shop-info {
 			background: #fff;
 			padding: 24rpx 32rpx;
@@ -382,29 +411,29 @@
 			justify-content: space-between;
 			align-items: center;
 			margin: 10rpx 0;
-			
+
 			.shop-name {
 				display: flex;
 				justify-content: flex-start;
 				align-items: center;
-				
+
 				.shop-logo {
 					width: 100rpx;
 					height: 100rpx;
 					border-radius: 50%;
 				}
-				
+
 				.shop-names {
 					margin: 0 20rpx;
 					font-size: 32rpx;
 				}
-				
+
 				.shop-type {
 					width: 40rpx;
 					height: 28rpx;
 				}
 			}
-			
+
 			.go-shop {
 				text {
 					font-size: 24rpx;
@@ -416,7 +445,7 @@
 				}
 			}
 		}
-		
+
 		.get-pay {
 			display: flex;
 			justify-content: space-around;
@@ -438,7 +467,7 @@
 					color: #36373D;
 				}
 			}
-			
+
 			.pay {
 				width: 420rpx;
 				line-height: 78rpx;
@@ -449,11 +478,11 @@
 				font-weight: 600;
 			}
 		}
-		
+
 		.uni-scroll-view {
 			overflow: visible !important;
 		}
-		
+
 		.spec-content {
 			background: #fff;
 			border-radius: 32rpx;
@@ -470,9 +499,9 @@
 					// top: -20rpx;
 					left: 0;
 				}
-				
+
 				.price {
-					
+
 				}
 				.close {
 					width: 26rpx;

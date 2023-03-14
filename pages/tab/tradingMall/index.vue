@@ -22,7 +22,6 @@
 					<view class="padding-sm placeholderStyle search-text">{{ searchText }}</view>
 				</view>
 			</view>
-			<!-- <view @click="toPath('/pages/tab/tradingMall/residencyAgreement')" class="settle-in" style="height: 64rpx;margin-right: 32rpx;"> -->
 
       <view v-if="userInfo && userInfo.user_type ===1" @click="toPath('/pages/tab/my/business/index')" class="settle-in" style="height: 64rpx;margin-right: 32rpx;">
       	<image src="/static/newPage/15.png" mode=""></image>
@@ -41,7 +40,6 @@
 				<swiper-item @click="gotoDetail()" v-for="(item,index) in 10" :key="index"
 					style="width:100%;height: 421rpx;">
 					<view style="width:100%;height: 421rpx;">
-						<!-- <fu-image src="/static/newPage/1.png" mode="" radius="5"></fu-image> -->
 						<image src="/static/newPage/1.png" mode=""></image>
 					</view>
 				</swiper-item>
@@ -53,9 +51,9 @@
 				<swiper-item>
 					<view class="swiper-item">
 						<view class="tab">
-							<view class="tab-item" @click="toPath('/pages/tab/tradingMall/classification')" v-for="item in 5" :key="item">
-								<image src="/static/newPage/1.png" mode=""></image>
-								<view>全部游戏</view>
+							<view class="tab-item" @click="toPath('/pages/tab/tradingMall/classification')" v-for="(item,index) in CategoryList" :key="index">
+								<image :src="item.thumb" mode=""></image>
+								<view>{{ item.name }}</view>
 							</view>
 						</view>
 					</view>
@@ -69,23 +67,23 @@
 				<view>精选推荐</view>
 			</view>
 			<view class="recommend-list">
-				<view class="recommend-item" @click="toPath('/pages/tab/tradingMall/goodDetail')" v-for="item in 9" :key="item">
+				<view class="recommend-item" @click="toPath(`/pages/tab/tradingMall/goodDetail?id=${item.id}`)" v-for="(item,index) in list" :key="index">
 					<view class="recommend-item-img">
-						<image src="/static/newPage/17.png" mode="aspectFill"></image>
-						<view>官网</view>
+						<image :src="item.thumb" mode="aspectFill"></image>
+						<view v-if="item.is_official === 1">官网</view>
 					</view>
-					<view class="shop-name">王者荣耀代练刷排位代打购买全皮肤国标服V10...</view>
+					<view class="shop-name">{{ item.name }}</view>
 					<view class="shop-price">
 						<text>￥</text>
-						<text>299</text>
-						<text>￥1000.00</text>
+						<text>{{ item.shop_price }}</text>
+						<text>￥{{ item.market_price }}</text>
 					</view>
 					<view class="shop-num">
-						<text>好评率98.4%</text>
-						<text>销量233</text>
+						<text>好评率{{ item.praise_rate }}%</text>
+						<text>销量{{ item.sales_sum }}</text>
 					</view>
 					<view class="go-shop">
-						<text>尚好家旗舰店 进店</text>
+						<text>{{ item.shop_name }} 进店</text>
 						<image src="/static/newPage/18.png" mode="aspectFill"></image>
 					</view>
 				</view>
@@ -115,14 +113,39 @@
 		data() {
 			return {
         userInfo:null,
-				searchText: '搜索你想要的商品'
+				searchText: '搜索你想要的商品',
+        list:[],
+        CategoryList:[]
 			}
 		},
     onLoad() {
       const value = uni.getStorageSync('USER_INFO');
       this.userInfo = value
+      this.initData()
+      this.getCategoryList()
     },
 		methods: {
+      initData(){
+        this.$api.post(global.apiUrls.shop_goods_list).then(res => {
+          if (res.data.code === '1') {
+            console.log(res.data.data)
+           this.list = [...this.list,...res.data.data.data]
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
+      getCategoryList(){
+        this.$api.get(global.apiUrls.shop_get_category_list,{
+          max_level:1
+        }).then(res => {
+          if (res.data.code === '1') {
+            this.CategoryList = res.data.data
+          } else {
+            this.$message.info(res.data.msg);
+          }
+        })
+      },
 			toPath(url){
 				uni.navigateTo({
 					url:url
