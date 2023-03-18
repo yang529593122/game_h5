@@ -254,15 +254,37 @@
         "navigationStyle": "custom"
       }
 
-    }, {
-      "path": "pages/tab/shop/shop",
-      "style": {
-        "navigationBarTitleText": "段铺",
-        "enablePullDownRefresh": false
-      }
-
     }
-  ],
+
+      ,{
+            "path" : "pages/tab/tradingMall/order_pay",
+            "style" :
+            {
+                "navigationBarTitleText": "确认订单",
+                "enablePullDownRefresh": false
+            }
+
+        }
+        ,{
+            "path" : "pages/tab/tradingMall/pay",
+            "style" :
+            {
+                "navigationBarTitleText": "立即支付",
+                "enablePullDownRefresh": false
+            }
+
+        }
+
+        ,{
+            "path" : "pages/tab/tradingMall/pay_success",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "支付结果",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
   "subPackages": [{
       "root": "pages/account",
       "pages": [{

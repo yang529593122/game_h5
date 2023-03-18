@@ -117,7 +117,7 @@
           <image src="/static/newPage/57.png" mode="aspectFill"></image>
           <view>客服</view>
         </view>
-        <view class="pay">
+        <view class="pay" @click="toPath(`/pages/tab/tradingMall/order_pay?id=${details.id}`)">
           立即购买
         </view>
       </view>

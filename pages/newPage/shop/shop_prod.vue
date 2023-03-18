@@ -111,13 +111,24 @@
         cid:'',
         curr: 0,
         list:[],
-        layout:false
+        layout:false,
+        currentPage:1,
+        last_page:1
       };
     },
     onLoad(opt) {
       this.id= opt.id
       this.cid = opt.cid || ""
       this.initList()
+    },
+    onReachBottom() {
+    	// this.handleSearch(); // 搜索方法
+    	console.log('触底了')
+    	if(this.currentPage < this.last_page) {
+        this.currentPage ++
+    		this.initList();
+    	}
+
     },
     methods:{
       gotoKefushangpin() {
@@ -137,15 +148,16 @@
         })
       },
       initList(){
-
         //  排序方式：0.置顶位（交易商城首页列表）；1.默认（时间倒序）；2.销量倒序；3.销量升序；4.好评率倒序；5.好评率升序；6.价格倒序；7.价格升序
         this.$api.post(global.apiUrls.shop_goods_list,{
           shop_id:this.id,
           cid:this.cid,
-          order:1
+          order:1,
+          list_rows:15,
+          page:this.currentPage
         }).then(res => {
           if (res.data.code === '1') {
-            console.log(res.data.data)
+            this.last_page = res.data.data.last_page
            this.list = [...this.list,...res.data.data.data]
           } else {
             this.$message.info(res.data.msg);
@@ -155,11 +167,15 @@
       },
       selectNav(type){
         this.curr = type
+        this.currentPage = 1
         this.$api.post(global.apiUrls.shop_goods_list,{
           shop_id:this.id,
-          order:type
+          order:type,
+          list_rows:15,
+          page:1
         }).then(res => {
           if (res.data.code === '1') {
+            this.last_page = res.data.data.last_page
            this.list = [...res.data.data.data]
           } else {
             this.$message.info(res.data.msg);
